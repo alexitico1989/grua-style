@@ -1,0 +1,8 @@
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "DJANGO_SETTINGS_MODULE=grua_platform.settings_railway python manage.py migrate --verbosity=2 && DJANGO_SETTINGS_MODULE=grua_platform.settings_railway python manage.py createadmin && DJANGO_SETTINGS_MODULE=grua_platform.settings_railway python manage.py collectstatic --noinput --verbosity=2 && DJANGO_SETTINGS_MODULE=grua_platform.settings_railway gunicorn grua_platform.wsgi:application --bind 0.0.0.0:$PORT --timeout 120 --workers 3"
+  }
+}
