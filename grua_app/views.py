@@ -124,7 +124,7 @@ def obtener_tarifas_usuario(user):
     return tarifas_default
 
 def formatear_fechas_solicitud(solicitud):
-    """Manejo específico para cada tipo de datetime"""
+    """Formateo inteligente según origen de la fecha"""
     try:
         from django.utils import timezone
         from datetime import timedelta
@@ -133,10 +133,23 @@ def formatear_fechas_solicitud(solicitud):
         if solicitud.fecha_solicitud:
             solicitud.fecha_solicitud_formateada = timezone.localtime(solicitud.fecha_solicitud).strftime('%d/%m/%Y %H:%M')
         
-        # Fecha de servicio - SIEMPRE restar 3 horas para servicios inmediatos
+        # Fecha de servicio - formateo inteligente
         if solicitud.fecha_servicio:
-            fecha_corregida = solicitud.fecha_servicio - timedelta(hours=3)
-            solicitud.fecha_servicio_formateada = fecha_corregida.strftime('%d/%m/%Y %H:%M')
+            # Detectar si es servicio inmediato vs programado
+            diferencia_horas = abs((solicitud.fecha_servicio - solicitud.fecha_solicitud).total_seconds() / 3600)
+            
+            if diferencia_horas < 2:  # Servicio inmediato
+                # Aplicar corrección solo si la hora parece incorrecta
+                hora_actual = timezone.now()
+                diferencia_con_ahora = abs((solicitud.fecha_servicio - hora_actual).total_seconds() / 3600)
+                
+                if diferencia_con_ahora > 2:  # Si la diferencia es mayor a 2 horas, corregir
+                    fecha_corregida = solicitud.fecha_servicio - timedelta(hours=3)
+                    solicitud.fecha_servicio_formateada = fecha_corregida.strftime('%d/%m/%Y %H:%M')
+                else:
+                    solicitud.fecha_servicio_formateada = solicitud.fecha_servicio.strftime('%d/%m/%Y %H:%M')
+            else:  # Servicio programado
+                solicitud.fecha_servicio_formateada = timezone.localtime(solicitud.fecha_servicio).strftime('%d/%m/%Y %H:%M')
         
         return solicitud
     except Exception as e:

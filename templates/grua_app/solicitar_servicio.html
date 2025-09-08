@@ -2097,7 +2097,7 @@ function selectService(tipo) {
     
     // 🆕 AGREGAR FECHA ACTUAL PARA SERVICIO INMEDIATO
     const ahora = new Date();
-    const fechaActual = ahora.toISOString().slice(0, 16); // formato datetime-local
+    const fechaActual = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
     document.getElementById('hidden_fecha_hora').value = fechaActual;
 }
     

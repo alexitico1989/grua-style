@@ -407,24 +407,20 @@ def format_local_datetime(dt):
     return timezone.localtime(dt).strftime('%d/%m/%Y %H:%M')
 
 def format_service_datetime(dt):
-    """Formateo con corrección específica para solicitudes inmediatas"""
+    """Formateo inteligente sin conversiones innecesarias"""
     from datetime import timedelta
+    from django.utils import timezone as django_timezone
     
     if dt:
-        # Para solicitudes inmediatas (cuando la fecha de servicio es muy cercana a la fecha de solicitud)
-        # necesitamos restar 3 horas porque Django las está guardando con 3 horas adelantadas
-        
-        # Verificamos si es una solicitud inmediata comparando con la hora actual
-        from django.utils import timezone as django_timezone
+        # Detectar si necesita corrección comparando con hora actual
         ahora = django_timezone.now()
         diferencia_horas = abs((dt - ahora).total_seconds() / 3600)
         
-        # Si la diferencia es menor a 2 horas, probablemente es inmediata y tiene el desfase
-        if diferencia_horas < 2:
+        # Solo corregir si la diferencia es sospechosamente grande para un servicio inmediato
+        if diferencia_horas > 2 and diferencia_horas < 24:
             fecha_corregida = dt - timedelta(hours=3)
             return fecha_corregida.strftime('%d/%m/%Y %H:%M')
         else:
-            # Para solicitudes programadas, usar tal como está
             return dt.strftime('%d/%m/%Y %H:%M')
     return ""
 
