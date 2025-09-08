@@ -124,25 +124,18 @@ def obtener_tarifas_usuario(user):
     return tarifas_default
 
 def formatear_fechas_solicitud(solicitud):
-    """Formatea las fechas de la solicitud corrigiendo desfases"""
+    """Manejo específico para cada tipo de datetime"""
     try:
         from django.utils import timezone
         from datetime import timedelta
         
-        # Para fecha de solicitud - usar timezone local
+        # Fecha de solicitud - siempre usar localtime
         if solicitud.fecha_solicitud:
             solicitud.fecha_solicitud_formateada = timezone.localtime(solicitud.fecha_solicitud).strftime('%d/%m/%Y %H:%M')
         
-        # Para fecha de servicio - corrección específica por tipo de servicio
+        # Fecha de servicio - SIEMPRE restar 3 horas para servicios inmediatos
         if solicitud.fecha_servicio:
-            # Revisión técnica necesita corrección diferente
-            if getattr(solicitud, 'tipo_servicio_categoria', '') == 'revision':
-                # Para revisión técnica, no restar horas (usar tal como está)
-                fecha_corregida = solicitud.fecha_servicio
-            else:
-                # Para otros servicios, restar 6 horas como antes
-                fecha_corregida = solicitud.fecha_servicio - timedelta(hours=6)
-            
+            fecha_corregida = solicitud.fecha_servicio - timedelta(hours=3)
             solicitud.fecha_servicio_formateada = fecha_corregida.strftime('%d/%m/%Y %H:%M')
         
         return solicitud
