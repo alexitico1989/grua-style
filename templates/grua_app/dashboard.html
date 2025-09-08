@@ -1,0 +1,1144 @@
+{% extends 'grua_app/base.html' %}
+
+{% block title %}Dashboard - Grúa Style{% endblock %}
+
+{% block extra_css %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000000">
+
+<style>
+/* Dashboard CSS */
+:root {
+    --pwa-bottom-nav-height: 0px;
+    --pwa-content-padding-bottom: 20px;
+    --pwa-floating-btn-bottom: 20px;
+}
+
+.pwa-bottom-nav, .pwa-floating-btn { display: none; }
+
+@media (display-mode: standalone) {
+    :root {
+        --pwa-bottom-nav-height: 80px;
+        --pwa-content-padding-bottom: 100px;
+        --pwa-floating-btn-bottom: 100px;
+    }
+    .pwa-bottom-nav, .pwa-floating-btn { display: flex; }
+}
+
+body {
+    background: #000;
+    color: #fff;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: var(--pwa-content-padding-bottom);
+}
+
+.dashboard-hero {
+    background: linear-gradient(135deg, #000 0%, #1a1a1a 100%);
+    padding: 120px 0 40px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(0, 213, 99, 0.1) 0%, transparent 50%);
+}
+
+.main-action-card {
+    margin: 2rem 0;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.main-action-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 213, 99, 0.1), transparent);
+    animation: shimmer 3s infinite;
+}
+
+.main-action-card:hover {
+    border-color: rgba(0, 213, 99, 0.3);
+    box-shadow: 0 30px 60px rgba(0, 213, 99, 0.15);
+    transform: translateY(-4px);
+}
+
+.main-action-btn {
+    display: block;
+    padding: 2rem 1.5rem;
+    text-decoration: none;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.main-action-btn:hover { color: #fff; text-decoration: none; }
+
+.action-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    filter: drop-shadow(0 0 20px rgba(0, 213, 99, 0.5));
+}
+
+.action-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #00D563;
+    text-shadow: 0 0 15px rgba(0, 213, 99, 0.4);
+}
+
+.action-subtitle {
+    font-size: 1rem;
+    opacity: 0.8;
+    font-weight: 500;
+    color: #ccc;
+}
+
+.dashboard-navigation {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    margin: 2rem 0;
+    overflow: hidden;
+    min-height: 500px;
+}
+
+.nav-tabs {
+    display: flex;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 20px 20px 0 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.nav-tabs::-webkit-scrollbar { display: none; }
+
+.nav-tab {
+    flex: 1;
+    min-width: 150px;
+    padding: 1rem 1.5rem;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-bottom: 3px solid transparent;
+}
+
+.nav-tab.active {
+    color: #00D563;
+    background: rgba(0, 213, 99, 0.1);
+    border-bottom-color: #00D563;
+}
+
+.nav-tab:hover:not(.active) {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-content {
+    display: none;
+    padding: 2rem;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active { display: block; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(0, 213, 99, 0.3);
+}
+
+.section-header p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+}
+
+.solicitudes-count {
+    background: rgba(0, 213, 99, 0.1);
+    color: #00D563;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: 1px solid rgba(0, 213, 99, 0.2);
+    backdrop-filter: blur(5px);
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+.solicitudes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.solicitud-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 2rem; /* Aumentado de 1.5rem */
+    backdrop-filter: blur(5px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 400px; /* Altura mínima para consistencia */
+    display: flex;
+    flex-direction: column;
+}
+
+.solicitud-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 213, 99, 0.1), transparent);
+    animation: shimmer 6s infinite;
+}
+
+.status-procesando_pago { 
+    background: linear-gradient(135deg, rgba(31, 182, 255, 0.2), rgba(14, 165, 233, 0.3));
+    color: #1FB6FF; 
+    border: 1px solid rgba(31, 182, 255, 0.4);
+}
+
+.solicitud-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(0, 213, 99, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 213, 99, 0.15);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap; /* Permite que el badge baje a nueva línea si es necesario */
+}
+
+.orden-number {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #fff;
+    font-family: 'Courier New', monospace;
+}
+
+.status-badge {
+    padding: 0.5rem 1.2rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(5px);
+    white-space: nowrap; /* Evita que se corte */
+    min-width: max-content; /* Se ajusta al contenido */
+    flex-shrink: 0;
+}
+
+.status-pendiente { 
+    background: linear-gradient(135deg, rgba(255, 133, 0, 0.2), rgba(255, 107, 0, 0.3));
+    color: #FF8500; 
+    border: 1px solid rgba(255, 133, 0, 0.4);
+}
+.status-confirmada { 
+    background: linear-gradient(135deg, rgba(0, 213, 99, 0.2), rgba(0, 184, 83, 0.3));
+    color: #00D563; 
+    border: 1px solid rgba(0, 213, 99, 0.4);
+}
+.status-en_proceso { 
+    background: linear-gradient(135deg, rgba(31, 182, 255, 0.2), rgba(14, 165, 233, 0.3));
+    color: #1FB6FF; 
+    border: 1px solid rgba(31, 182, 255, 0.4);
+}
+.status-completada { 
+    background: linear-gradient(135deg, rgba(0, 213, 99, 0.2), rgba(0, 184, 83, 0.3));
+    color: #00D563; 
+    border: 1px solid rgba(0, 213, 99, 0.4);
+}
+.status-cancelada { 
+    background: linear-gradient(135deg, rgba(255, 48, 64, 0.2), rgba(220, 38, 38, 0.3));
+    color: #FF3040; 
+    border: 1px solid rgba(255, 48, 64, 0.4);
+}
+.status-pendiente_pago { 
+    background: linear-gradient(135deg, rgba(255, 170, 0, 0.2), rgba(245, 158, 11, 0.3));
+    color: #FFAA00; 
+    border: 1px solid rgba(255, 170, 0, 0.4);
+}
+
+.status-pendiente_confirmacion { 
+    background: linear-gradient(135deg, rgba(255, 170, 0, 0.2), rgba(245, 158, 11, 0.3));
+    color: #FFAA00; 
+    border: 1px solid rgba(255, 170, 0, 0.4);
+}
+
+.route-info {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    font-size: 0.875rem;
+    color: #ccc;
+}
+
+.route-info strong { color: #00D563; }
+
+.card-details {
+    margin: 1rem 0;
+    font-size: 0.875rem;
+    color: #999;
+}
+
+.card-details i {
+    color: #00D563;
+    margin-right: 0.5rem;
+    width: 16px;
+}
+
+.card-details div { margin-bottom: 0.5rem; }
+
+.card-actions {
+    margin-top: auto;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    text-decoration: none;
+    color: #fff;
+    text-align: center;
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    backdrop-filter: blur(5px);
+    flex: 1;
+    min-width: 140px;
+    justify-content: center;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(0, 213, 99, 0.3);
+    color: #fff;
+    transform: translateY(-2px);
+    text-decoration: none;
+    box-shadow: 0 8px 20px rgba(0, 213, 99, 0.1);
+}
+
+.action-btn.primary {
+    background: rgba(0, 213, 99, 0.1);
+    color: #00D563;
+    border-color: rgba(0, 213, 99, 0.3);
+}
+
+.action-btn.primary:hover {
+    background: rgba(0, 213, 99, 0.2);
+    color: #00D563;
+    border-color: rgba(0, 213, 99, 0.5);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    backdrop-filter: blur(5px);
+    position: relative;
+    overflow: hidden;
+}
+
+.empty-state::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 213, 99, 0.1), transparent);
+    animation: shimmer 4s infinite;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.3;
+    filter: drop-shadow(0 0 20px rgba(0, 213, 99, 0.3));
+}
+
+.empty-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 213, 99, 0.2);
+}
+
+.empty-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #999;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+/* Membresía */
+.membership-container { margin-top: 1rem; }
+
+.membership-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.membership-card.premium {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 255, 255, 0.1) 100%);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.membership-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #000;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+}
+
+.membership-info h3 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(0, 213, 99, 0.3);
+}
+
+.membership-validity {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+}
+
+.membership-benefits { margin-bottom: 2rem; }
+
+.benefit-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.benefit-item i {
+    color: #00D563;
+    font-size: 0.9rem;
+}
+
+.membership-progress { margin-bottom: 2rem; }
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.progress-bar {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00D563, #00FF7F);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.membership-btn {
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    color: #000;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    justify-content: center;
+}
+
+.membership-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+    color: #000;
+    text-decoration: none;
+}
+
+.membership-btn.cancel {
+    background: linear-gradient(135deg, #ff4757, #ff3742);
+    color: #fff;
+}
+
+.membership-btn.cancel:hover {
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(255, 71, 87, 0.3);
+}
+
+/* Servicios Rápidos */
+.quick-services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.quick-service-card {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quick-service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 213, 99, 0.3);
+    border-color: rgba(0, 213, 99, 0.5);
+}
+
+.service-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.service-icon.grua { background: linear-gradient(135deg, #00D563, #00FF7F); }
+.service-icon.mecanica { background: linear-gradient(135deg, #FF6B35, #FF8E53); }
+.service-icon.bateria { background: linear-gradient(135deg, #4ECDC4, #44A08D); }
+.service-icon.combustible { background: linear-gradient(135deg, #667eea, #764ba2); }
+
+.service-info { flex: 1; }
+
+.service-info h3 {
+    color: #fff;
+    margin-bottom: 0.25rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+.service-info p {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.service-time {
+    background: rgba(0, 213, 99, 0.2);
+    color: #00D563;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.service-arrow {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.quick-service-card:hover .service-arrow {
+    color: #00D563;
+    transform: translateX(5px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .dashboard-hero { padding: 60px 0 40px 0; }
+    .solicitudes-grid { grid-template-columns: 1fr; }
+    .main-action-card { margin: 1.5rem 0; }
+    .quick-services-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .card-actions { flex-direction: column; }
+    .action-btn { flex: none; min-width: auto; }
+    .nav-tabs { flex-wrap: wrap; }
+    .nav-tab { min-width: 120px; padding: 0.75rem 1rem; font-size: 0.8rem; }
+    .tab-content { padding: 1rem; }
+}
+
+@media (max-width: 480px) {
+    .section-title { font-size: 1.5rem; }
+    .solicitud-card { padding: 1rem; }
+    .quick-service-card { flex-direction: column; text-align: center; gap: 1rem; }
+    .service-arrow { display: none; }
+    .membership-card { padding: 1.5rem; }
+    .nav-tab { min-width: 100px; padding: 0.5rem; font-size: 0.75rem; }
+}
+
+/* Para el dashboard - clase .orden-number */
+.orden-number {
+    font-size: clamp(0.8rem, 3vw, 1.2rem);
+    word-break: break-all;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    .orden-number {
+        font-size: 0.9rem !important;
+        padding: 4px 8px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+        text-align: center;
+    }
+}
+
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="dashboard-hero">
+    <div class="container">
+        <div class="main-action-card">
+            <a href="{% url 'solicitar_servicio' %}" class="main-action-btn">
+                <div class="action-title">Solicitar Grúa</div>
+                <div class="action-subtitle">Servicio disponible 24/7</div>
+            </a>
+        </div>
+
+        <div class="dashboard-navigation">
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="solicitudes">
+                    <i class="fas fa-list-alt"></i>
+                    Mis Solicitudes
+                </button>
+                <button class="nav-tab" data-tab="servicios">
+                    <i class="fas fa-plus-circle"></i>
+                    Servicios
+                </button>
+                <button class="nav-tab" data-tab="membresia">
+                    <i class="fas fa-crown"></i>
+                    Membresía
+                </button>
+                <button class="nav-tab" data-tab="historial">
+                    <i class="fas fa-history"></i>
+                    Historial
+                </button>
+                <button class="nav-tab" data-tab="estadisticas">
+                    <i class="fas fa-chart-line"></i>
+                    Estadísticas
+                </button>
+            </div>
+
+            <!-- TAB CONTENT: MIS SOLICITUDES -->
+            <div class="tab-content active" id="solicitudes">
+                <div class="section-header">
+                    <h2 class="section-title">Mis Solicitudes</h2>
+                    <p>Gestiona tus servicios de grúa activos</p>
+                    {% if solicitudes %}
+                    <div class="solicitudes-count">{{ solicitudes|length }} solicitud{{ solicitudes|length|pluralize:"es" }}</div>
+                    {% endif %}
+                </div>
+                
+                {% if solicitudes %}
+                <div class="solicitudes-grid">
+                    {% for solicitud in solicitudes %}
+                    <div class="solicitud-card">
+                        <div class="card-header">
+                            <div class="orden-number">
+                            {% if solicitud.tipo_servicio_categoria == 'asistencia' %}
+                                🔧 {{ solicitud.numero_orden }}
+                            {% elif solicitud.tipo_servicio_categoria == 'bateria' %}
+                                🔋 {{ solicitud.numero_orden }}
+                            {% else %}
+                                🚛 {{ solicitud.numero_orden }}
+                            {% endif %}
+                        </div>
+                            <div class="status-badge status-{{ solicitud.estado }}">
+                                {{ solicitud.get_estado_display }}
+                            </div>
+                        </div>
+                        
+                        <div class="route-info">
+                            <div><strong>Origen:</strong> {{ solicitud.direccion_origen }}</div>
+                            <div><strong>Destino:</strong> {{ solicitud.direccion_destino }}</div>
+                        </div>
+                        
+                        <div class="card-details">
+                            <div><i class="fas fa-calendar"></i>{{ solicitud.fecha_servicio_formateada }}</div>
+                            <div>
+                            <i class="fas fa-{% if solicitud.tipo_vehiculo == 'auto' %}car{% elif solicitud.tipo_vehiculo == 'camioneta' %}truck-pickup{% elif solicitud.tipo_vehiculo == 'moto' %}motorcycle{% elif solicitud.tipo_vehiculo == 'camion' %}truck{% else %}car{% endif %}"></i>
+                            {{ solicitud.tipo_vehiculo|title|default:"Vehículo" }}
+                        </div>
+
+                            <div>
+                            <i class="fas fa-{% if solicitud.tipo_servicio_categoria == 'asistencia' %}wrench{% elif solicitud.tipo_servicio_categoria == 'bateria' %}battery-three-quarters{% else %}truck{% endif %}"></i>
+                            {% if solicitud.tipo_servicio_categoria == 'asistencia' %}
+                                Asistencia Mecánica
+                            {% elif solicitud.tipo_servicio_categoria == 'bateria' %}
+                                Carga de Batería
+                            {% else %}
+                                Servicio de Grúa
+                            {% endif %}
+                        </div>
+                            {% if solicitud.total %}
+                            <div><i class="fas fa-dollar-sign"></i>${{ solicitud.total|floatformat:0 }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="card-actions">
+                            <a href="{% url 'ver_detalles_solicitud' solicitud.id %}" class="action-btn primary">
+                                <i class="fas fa-eye"></i>Ver Detalles
+                            </a>
+                            <a href="{% url 'descargar_pdf_solicitud' solicitud.id %}" class="action-btn">
+                                <i class="fas fa-file-pdf"></i>PDF
+                            </a>
+                            <a href="{% url 'reenviar_comprobante' solicitud.id %}" class="action-btn">
+                                <i class="fas fa-envelope"></i>Email
+                            </a>
+                            {% if solicitud.estado == 'pendiente' %}
+                            <a href="{% url 'procesar_pago' solicitud.id %}" class="action-btn primary">
+                                <i class="fas fa-credit-card"></i>Pagar
+                            </a>
+                            {% elif solicitud.estado == 'pendiente_pago' and not solicitud.metodo_pago %}
+                            <a href="{% url 'procesar_pago' solicitud.id %}" class="action-btn primary">
+                                <i class="fas fa-credit-card"></i>Pagar
+                            </a>
+                            
+                            {% elif solicitud.estado in 'procesando_pago,pendiente_confirmacion,confirmada,pendiente' %}
+                        <!-- Verificar si han pasado más de 1 hora -->
+                        {% now "Y-m-d H:i:s" as fecha_actual %}
+                        <!-- Botones para gestionar solicitudes pendientes -->
+                        {% if solicitud.estado == 'procesando_pago' %}
+                            <a href="{% url 'completar_pago_pendiente' solicitud.id %}" class="action-btn primary">
+                                <i class="fas fa-credit-card"></i>Completar Pago
+                            </a>
+                        {% endif %}
+
+                        <a href="{% url 'cambiar_a_efectivo' solicitud.id %}" class="action-btn">
+                            <i class="fas fa-money-bill"></i>Efectivo
+                        </a>
+                        <a href="{% url 'cambiar_a_transferencia' solicitud.id %}" class="action-btn">
+                            <i class="fas fa-university"></i>Transferencia
+                        </a>
+                        
+                        <a href="{% url 'cambiar_a_mercadopago' solicitud.id %}" class="action-btn">
+                            <i class="fas fa-credit-card"></i>Tarjeta
+                        </a>
+                        <a href="{% url 'eliminar_solicitud_pendiente' solicitud.id %}" class="action-btn" 
+                        style="background: rgba(255, 48, 64, 0.1); color: #FF3040; border-color: rgba(255, 48, 64, 0.3);"
+                        onclick="return confirm('¿Eliminar esta solicitud? Esta acción no se puede deshacer.')">
+                            <i class="fas fa-trash"></i>Eliminar
+                        </a>
+                        {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-truck"></i></div>
+                    <div class="empty-title">No hay solicitudes</div>
+                    <div class="empty-text">
+                        Cuando necesites un servicio de grúa, tu historial aparecerá aquí.
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- TAB CONTENT: SERVICIOS RÁPIDOS -->
+            <div class="tab-content" id="servicios">
+                <div class="section-header">
+                    <h2 class="section-title">Servicios Rápidos</h2>
+                    <p>Solicita un servicio de forma rápida y sencilla</p>
+                </div>
+                <div class="quick-services-grid">
+                    <div class="quick-service-card" onclick="window.location.href='{% url 'solicitar_servicio' %}'">
+                        <div class="service-icon grua">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>Grúa de Emergencia</h3>
+                            <p>Servicio inmediato 24/7</p>
+                            <span class="service-time">15-30 min</span>
+                        </div>
+                        <div class="service-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-service-card" onclick="window.location.href='{% url 'asistencia_mecanica' %}'">
+                        <div class="service-icon mecanica">
+                            <i class="fas fa-wrench"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>Asistencia Mecánica</h3>
+                            <p>Reparación en el lugar</p>
+                            <span class="service-time">20-45 min</span>
+                        </div>
+                        <div class="service-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-service-card" onclick="window.location.href='{% url 'asistencia_mecanica' %}'">
+                        <div class="service-icon bateria">
+                            <i class="fas fa-battery-three-quarters"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>Carga de Batería</h3>
+                            <p>Arranque y carga rápida</p>
+                            <span class="service-time">10-20 min</span>
+                        </div>
+                        <div class="service-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-service-card" onclick="window.location.href='{% url 'asistencia_mecanica' %}'">
+                        <div class="service-icon combustible">
+                            <i class="fas fa-gas-pump"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>Combustible</h3>
+                            <p>Entrega en el lugar</p>
+                            <span class="service-time">25-40 min</span>
+                        </div>
+                        <div class="service-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: MEMBRESÍA -->
+            <div class="tab-content" id="membresia">
+                <div class="section-header">
+                    <h2 class="section-title">Estado de Membresía</h2>
+                    <p>Gestiona tu plan y beneficios</p>
+                </div>
+                <div class="membership-container">
+                    {% if membresia_activa %}
+                        <div class="membership-card premium">
+                            <div class="membership-badge">
+                                <i class="fas fa-star"></i>
+                                <span>{{ membresia_activa.tipo_membresia.nombre|upper }}</span>
+                            </div>
+                            <div class="membership-info">
+                                <h3>Plan {{ membresia_activa.tipo_membresia.nombre|title }} Activo</h3>
+                                <p class="membership-validity">Válido hasta: {{ membresia_activa.fecha_vencimiento|date:"d \d\e F Y" }}</p>
+                                <div class="membership-benefits">
+                                    <div class="benefit-item">
+                                        <i class="fas fa-check"></i>
+                                        <span>Servicio 24/7 prioritario</span>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="fas fa-check"></i>
+                                        <span>Descuento {{ membresia_activa.tipo_membresia.descuento_porcentaje }}% en todos los servicios</span>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="fas fa-check"></i>
+                                        <span>Servicios disponibles: {{ membresia_activa.servicios_disponibles }}</span>
+                                    </div>
+                                    <div class="benefit-item">
+                                        <i class="fas fa-check"></i>
+                                        <span>Historial completo de servicios</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if membresia_activa.tipo_membresia.servicios_incluidos > 0 %}
+                            <div class="membership-progress">
+                                <div class="progress-label">
+                                    <span>Servicios utilizados</span>
+                                    <span>{{ membresia_activa.servicios_utilizados }}/{{ membresia_activa.tipo_membresia.servicios_incluidos }}</span>
+                                </div>
+                                <div class="progress-bar">
+                                    {% widthratio membresia_activa.servicios_utilizados membresia_activa.tipo_membresia.servicios_incluidos 100 as porcentaje %}
+                                    <div class="progress-fill" style="width: {{ porcentaje }}%"></div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                                <a href="{% url 'membresias' %}" class="membership-btn" style="flex: 1;">
+                                    <i class="fas fa-arrow-up"></i>
+                                    Cambiar Plan
+                                </a>
+                                <form method="post" action="{% url 'cancelar_membresia' %}" style="flex: 1;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="membership-btn cancel" style="width: 100%;" 
+                                            onclick="return confirm('¿Estás seguro de que quieres cancelar tu membresía?')">
+                                        <i class="fas fa-times"></i>
+                                        Cancelar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="membership-card">
+                            <div style="text-align: center; padding: 2rem;">
+                                <div style="font-size: 3rem; color: #00D563; margin-bottom: 1.5rem; opacity: 0.3;">
+                                    <i class="fas fa-crown"></i>
+                                </div>
+                                <h3 style="color: #fff; margin-bottom: 1rem;">No tienes una membresía activa</h3>
+                                <p style="color: #ccc; margin-bottom: 2rem;">Obtén beneficios exclusivos, descuentos y servicios prioritarios</p>
+                                <a href="{% url 'membresias' %}" class="membership-btn">
+                                    <i class="fas fa-plus"></i>
+                                    Contratar Membresía
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- TAB CONTENT: HISTORIAL -->
+            <div class="tab-content" id="historial">
+                <div class="section-header">
+                    <h2 class="section-title">Historial de Servicios</h2>
+                    <p>Todos tus servicios de grúa y asistencia realizados</p>
+                </div>
+                <div class="history-container">
+                    {% if solicitudes %}
+                    <div class="solicitudes-grid">
+                        {% for solicitud in solicitudes %}
+                        <div class="solicitud-card">
+                            <div class="card-header">
+                                <div class="orden-number">
+                                {% if solicitud.tipo_servicio_categoria == 'asistencia' %}
+                                    🔧 {{ solicitud.numero_orden }}
+                                {% elif solicitud.tipo_servicio_categoria == 'bateria' %}
+                                    🔋 {{ solicitud.numero_orden }}
+                                {% else %}
+                                    🚛 {{ solicitud.numero_orden }}
+                                {% endif %}
+                            </div>
+                                <div class="status-badge status-{{ solicitud.estado }}">
+                                    {{ solicitud.get_estado_display }}
+                                </div>
+                            </div>
+                            
+                            <div class="route-info">
+                                <div><strong>Fecha:</strong> {{ solicitud.fecha_servicio_formateada }}</div>
+                                <div><strong>Origen:</strong> {{ solicitud.direccion_origen }}</div>
+                                <div><strong>Destino:</strong> {{ solicitud.direccion_destino }}</div>
+                            </div>
+                            
+                            <div class="card-details">
+                                <div>
+                                <i class="fas fa-{% if solicitud.tipo_vehiculo == 'auto' %}car{% elif solicitud.tipo_vehiculo == 'camioneta' %}truck-pickup{% elif solicitud.tipo_vehiculo == 'moto' %}motorcycle{% elif solicitud.tipo_vehiculo == 'camion' %}truck{% else %}car{% endif %}"></i>
+                                {{ solicitud.tipo_vehiculo|title|default:"Vehículo" }}
+                            </div>
+
+                                <div>
+                                <i class="fas fa-{% if solicitud.tipo_servicio_categoria == 'asistencia' %}wrench{% elif solicitud.tipo_servicio_categoria == 'bateria' %}battery-three-quarters{% else %}truck{% endif %}"></i>
+                                {% if solicitud.tipo_servicio_categoria == 'asistencia' %}
+                                    Asistencia Mecánica
+                                {% elif solicitud.tipo_servicio_categoria == 'bateria' %}
+                                    Carga de Batería
+                                {% else %}
+                                    Servicio de Grúa
+                                {% endif %}
+                            </div>
+                                {% if solicitud.total %}
+                                <div><i class="fas fa-dollar-sign"></i>${{ solicitud.total|floatformat:0 }}</div>
+                                {% endif %}
+                                {% if solicitud.metodo_pago %}
+                                <div><i class="fas fa-credit-card"></i>{{ solicitud.get_metodo_pago_display }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="card-actions">
+                                <a href="{% url 'ver_detalles_solicitud' solicitud.id %}" class="action-btn primary">
+                                    <i class="fas fa-eye"></i>Ver Detalles
+                                </a>
+                                <a href="{% url 'descargar_pdf_solicitud' solicitud.id %}" class="action-btn">
+                                    <i class="fas fa-file-pdf"></i>PDF
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon"><i class="fas fa-history"></i></div>
+                        <div class="empty-title">No hay servicios en el historial</div>
+                        <div class="empty-text">
+                            Una vez que uses nuestros servicios, aparecerán aquí para tu consulta.
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- TAB CONTENT: ESTADÍSTICAS -->
+            <div class="tab-content" id="estadisticas">
+                <div class="section-header">
+                    <h2 class="section-title">Mis Estadísticas</h2>
+                    <p>Resumen de tu actividad y ahorros</p>
+                </div>
+                <div class="quick-services-grid">
+                    <div class="quick-service-card">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>{{ solicitudes|length|default:"0" }} Servicios</h3>
+                            <p>Total realizados</p>
+                            <span class="service-time">{% if solicitudes|length > 0 %}Activo{% else %}Próximamente{% endif %}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-service-card">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #FFD700, #FFA500);">
+                            <i class="fas fa-piggy-bank"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>$0 Ahorrado</h3>
+                            <p>Con membresía</p>
+                            <span class="service-time">Obtén plan</span>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-service-card">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #4ECDC4, #44A08D);">
+                            <i class="fas fa-stopwatch"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>15 min</h3>
+                            <p>Tiempo promedio</p>
+                            <span class="service-time">Servicio rápido</span>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-service-card">
+                        <div class="service-icon" style="background: linear-gradient(135deg, #FF6B35, #FF8E53);">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>4.9/5</h3>
+                            <p>Satisfacción</p>
+                            <span class="service-time">Excelente</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const navTabs = document.querySelectorAll('.nav-tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    navTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const targetTab = this.dataset.tab;
+            
+            navTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === targetTab) {
+                    content.classList.add('active');
+                }
+            });
+        });
+    });
+
+    navTabs.forEach(tab => {
+        tab.addEventListener('mouseenter', function() {
+            if (!this.classList.contains('active')) {
+                this.style.transform = 'translateY(-2px)';
+            }
+        });
+        
+        tab.addEventListener('mouseleave', function() {
+            if (!this.classList.contains('active')) {
+                this.style.transform = 'translateY(0)';
+            }
+        });
+    });
+});
+</script>
+{% endblock %}
