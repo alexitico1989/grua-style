@@ -129,6 +129,11 @@ def formatear_fechas_solicitud(solicitud):
         from django.utils import timezone
         from datetime import timedelta
         
+        print(f"🔍 DEBUG formatear_fechas_solicitud:")
+        print(f"   Solicitud: {solicitud.numero_orden}")
+        print(f"   Fecha servicio original: {solicitud.fecha_servicio}")
+        print(f"   Fecha solicitud: {solicitud.fecha_solicitud}")
+        
         # Fecha de solicitud - siempre usar localtime
         if solicitud.fecha_solicitud:
             solicitud.fecha_solicitud_formateada = timezone.localtime(solicitud.fecha_solicitud).strftime('%d/%m/%Y %H:%M')
@@ -137,19 +142,26 @@ def formatear_fechas_solicitud(solicitud):
         if solicitud.fecha_servicio:
             # Detectar si es servicio inmediato vs programado
             diferencia_horas = abs((solicitud.fecha_servicio - solicitud.fecha_solicitud).total_seconds() / 3600)
+            print(f"   Diferencia horas: {diferencia_horas}")
             
             if diferencia_horas < 2:  # Servicio inmediato
-                # Aplicar corrección solo si la hora parece incorrecta
+                print("   Detectado como INMEDIATO")
                 hora_actual = timezone.now()
                 diferencia_con_ahora = abs((solicitud.fecha_servicio - hora_actual).total_seconds() / 3600)
+                print(f"   Diferencia con ahora: {diferencia_con_ahora}")
                 
-                if diferencia_con_ahora > 2:  # Si la diferencia es mayor a 2 horas, corregir
+                if diferencia_con_ahora > 2:
+                    print("   Aplicando corrección -3h")
                     fecha_corregida = solicitud.fecha_servicio - timedelta(hours=3)
                     solicitud.fecha_servicio_formateada = fecha_corregida.strftime('%d/%m/%Y %H:%M')
                 else:
+                    print("   Sin corrección")
                     solicitud.fecha_servicio_formateada = solicitud.fecha_servicio.strftime('%d/%m/%Y %H:%M')
             else:  # Servicio programado
+                print("   Detectado como PROGRAMADO")
                 solicitud.fecha_servicio_formateada = timezone.localtime(solicitud.fecha_servicio).strftime('%d/%m/%Y %H:%M')
+            
+            print(f"   Fecha servicio formateada: {solicitud.fecha_servicio_formateada}")
         
         return solicitud
     except Exception as e:
