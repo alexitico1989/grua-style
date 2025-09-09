@@ -2113,6 +2113,265 @@
         font-size: 0.6rem !important;
     }
 }
+
+/* ===================================
+   MOBILE FIX - CENTRADO Y PERFORMANCE
+   Agrega al final de tu CSS existente
+   =================================== */
+
+/* CENTRADO FORZADO PARA HERO SECTION */
+@media (max-width: 768px) {
+    .hero-container {
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    .hero-content {
+        text-align: center !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* TÍTULO CENTRADO */
+    .hero-title,
+    .hero-title-3d,
+    .hero-title-line {
+        text-align: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+    
+    .hero-subtitle {
+        text-align: center !important;
+        margin: 0 auto !important;
+        display: block !important;
+        width: 100% !important;
+    }
+    
+    /* BOTONES COMPLETAMENTE CENTRADOS */
+    .cta-buttons {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+    }
+    
+    .btn-uber {
+        display: block !important;
+        text-align: center !important;
+        margin: 8px auto !important;
+        width: 100% !important;
+        max-width: 300px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* CENTRADO EXTRA EN MÓVIL */
+    .hero-section {
+        text-align: center !important;
+    }
+    
+    .hero-container {
+        text-align: center !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    .hero-content {
+        text-align: center !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 0 auto !important;
+    }
+    
+    .cta-buttons {
+        align-items: center !important;
+        justify-content: center !important;
+        margin: 20px auto !important;
+    }
+    
+    .btn-uber {
+        margin: 6px auto !important;
+        text-align: center !important;
+        display: block !important;
+        width: 90% !important;
+        max-width: 280px !important;
+    }
+}
+
+/* ===================================
+   OPTIMIZACIÓN DE PERFORMANCE
+   Eliminar efectos pesados en móvil
+   =================================== */
+
+@media (max-width: 768px) {
+    /* ELIMINAR ANIMACIONES COMPLEJAS */
+    .hero-title-3d,
+    .word-servicio,
+    .word-de,
+    .word-grua,
+    .hero-highlight {
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+    
+    /* ELIMINAR EFECTOS DE GLOW PESADOS */
+    .hero-title,
+    .hero-title-3d,
+    .hero-highlight {
+        text-shadow: 0 0 10px rgba(0, 213, 99, 0.3) !important;
+    }
+    
+    /* ELIMINAR SHIMMER EFFECTS */
+    .btn-uber::before,
+    .section-header::before,
+    .feature-card::before,
+    .pricing-card::before,
+    .cta-content::before,
+    .price-item::before,
+    .pricing-example::before,
+    .cta-stat::before,
+    .stat-item::before {
+        animation: none !important;
+        display: none !important;
+    }
+    
+    /* SIMPLIFICAR BACKDROP FILTER */
+    .hero-section::before,
+    .features-section::before,
+    .pricing-section::before,
+    .cta-section::before {
+        backdrop-filter: none !important;
+        background: none !important;
+    }
+    
+    /* REDUCIR BLUR EFFECTS */
+    .stat-item,
+    .feature-card,
+    .pricing-card,
+    .section-header,
+    .cta-content,
+    .btn-uber {
+        backdrop-filter: blur(2px) !important;
+    }
+    
+    /* ELIMINAR TRANSFORMACIONES HOVER COMPLEJAS */
+    .feature-card:hover,
+    .stat-item:hover,
+    .cta-stat:hover,
+    .btn-uber:hover {
+        transform: none !important;
+    }
+    
+    /* SIMPLIFICAR BOX-SHADOWS */
+    .feature-card,
+    .stat-item,
+    .cta-stat,
+    .btn-uber {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* PERFORMANCE EXTREMO EN MÓVILES PEQUEÑOS */
+    
+    /* ELIMINAR TODOS LOS GRADIENTS COMPLEJOS */
+    .hero-section,
+    .features-section,
+    .pricing-section,
+    .cta-section {
+        background: #000 !important;
+    }
+    
+    .btn-uber {
+        background: rgba(0, 213, 99, 0.1) !important;
+        border: 1px solid rgba(0, 213, 99, 0.3) !important;
+    }
+    
+    .btn-primary {
+        background: rgba(0, 213, 99, 0.2) !important;
+        border: 1px solid rgba(0, 213, 99, 0.5) !important;
+    }
+    
+    /* ELIMINAR PARALLAX SCROLL */
+    .hero-section,
+    .features-section,
+    .pricing-section,
+    .cta-section {
+        transform: none !important;
+    }
+    
+    /* ELIMINAR TRANSICIONES COMPLEJAS */
+    * {
+        transition: none !important;
+    }
+    
+    /* SOLO MANTENER TRANSICIONES BÁSICAS */
+    .btn-uber {
+        transition: background-color 0.2s ease !important;
+    }
+    
+    /* ELIMINAR BLUR COMPLETO EN MÓVILES MUY PEQUEÑOS */
+    .stat-item,
+    .feature-card,
+    .pricing-card,
+    .section-header,
+    .cta-content {
+        backdrop-filter: none !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+    }
+}
+
+/* ===================================
+   OVERRIDE GRID RESPONSIVE FORZADO
+   =================================== */
+
+@media (max-width: 768px) {
+    /* FORZAR GRID A UNA COLUMNA EN TABLET */
+    .hero-container {
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    /* ASEGURAR UNA SOLA COLUMNA EN MÓVIL */
+    .hero-container,
+    .features-grid,
+    .pricing-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+    
+    /* STATS SIEMPRE 3 COLUMNAS */
+    .hero-stats {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+    }
+    
+    .cta-stats {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+}
 </style>
 {% endblock %}
 
