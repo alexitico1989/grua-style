@@ -386,181 +386,6 @@
         object-position: center;
     }
 
-    /* SECCIÓN DE PARTNERS CON CARRUSEL ANIMADO */
-    .partners-section {
-        padding: 80px 0;
-        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
-        overflow: hidden;
-        position: relative;
-    }
-
-    .partners-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: radial-gradient(circle at 30% 50%, rgba(0, 213, 99, 0.05) 0%, transparent 50%);
-    }
-
-    .partners-header {
-        text-align: center;
-        margin-bottom: 50px;
-        position: relative;
-        z-index: 2;
-    }
-
-    .partners-header h2 {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #fff;
-        margin-bottom: 15px;
-        position: relative;
-        text-shadow: 
-            0 0 20px rgba(0, 213, 99, 0.3),
-            0 0 40px rgba(0, 213, 99, 0.2);
-    }
-
-    .partners-header h2::after {
-        content: '';
-        position: absolute;
-        bottom: -10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 60px;
-        height: 4px;
-        background: linear-gradient(90deg, #00D563, #00B853);
-        border-radius: 2px;
-    }
-
-    .partners-header p {
-        font-size: 1.1rem;
-        color: #ccc;
-        max-width: 600px;
-        margin: 0 auto;
-    }
-
-    .partners-carousel-container {
-        position: relative;
-        overflow: hidden;
-        mask-image: linear-gradient(
-            to right,
-            transparent 0%,
-            black 10%,
-            black 90%,
-            transparent 100%
-        );
-        -webkit-mask-image: linear-gradient(
-            to right,
-            transparent 0%,
-            black 10%,
-            black 90%,
-            transparent 100%
-        );
-    }
-
-    .partners-carousel {
-        display: flex;
-        gap: 30px;
-        animation: scrollPartners 30s linear infinite;
-        width: max-content;
-    }
-
-    .partner-card {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 15px;
-        padding: 25px;
-        text-align: center;
-        min-width: 200px;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        backdrop-filter: blur(5px);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .partner-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 2px;
-        background: linear-gradient(90deg, transparent, #00D563, transparent);
-        transition: left 0.5s ease;
-    }
-
-    .partner-card:hover::before {
-        left: 100%;
-    }
-
-    .partner-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 8px 30px rgba(0, 213, 99, 0.25);
-        border-color: rgba(0, 213, 99, 0.4);
-    }
-
-    .partner-card img {
-        width: 120px;
-        height: 80px;
-        object-fit: contain;
-        margin-bottom: 15px;
-        border-radius: 8px;
-        transition: transform 0.3s ease;
-        filter: brightness(0.8);
-    }
-
-    .partner-card:hover img {
-        transform: scale(1.05);
-        filter: brightness(1);
-    }
-
-    .partner-card h4 {
-        font-size: 1rem;
-        font-weight: 600;
-        color: #fff;
-        margin: 0;
-        text-shadow: 0 0 10px rgba(0, 213, 99, 0.2);
-    }
-
-    /* Pausar animación al hover */
-    .partners-carousel:hover {
-        animation-play-state: paused;
-    }
-
-    /* Animación de desplazamiento */
-    @keyframes scrollPartners {
-        0% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(-50%);
-        }
-    }
-
-    /* Gradiente sutil en los bordes para efecto de desvanecimiento */
-    .partners-carousel-container::before,
-    .partners-carousel-container::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 100px;
-        z-index: 2;
-        pointer-events: none;
-    }
-
-    .partners-carousel-container::before {
-        left: 0;
-        background: linear-gradient(to right, #0a0a0a, transparent);
-    }
-
-    .partners-carousel-container::after {
-        right: 0;
-        background: linear-gradient(to left, #1a1a1a, transparent);
-    }
     
     /* Features Section glassmorphism */
     .features-section {
@@ -1864,278 +1689,194 @@
         }
     }
 
-    /* AGREGAR ESTAS OPTIMIZACIONES MOBILE AL FINAL DE TU CSS EXISTENTE */
+/* =================================
+   MOBILE OPTIMIZATIONS - VERSIÓN CORREGIDA
+   Soluciona: imágenes cortadas, centrado, velocidad
+   ================================= */
 
-/* OPTIMIZACIONES DE VELOCIDAD - Reduce animaciones complejas */
-.hero-section::before,
-.glassmorphism::before {
-    animation-duration: 8s; /* Más lento para mejor performance */
-}
-
-/* Reduce shimmer effects en mobile */
-@media (max-width: 768px) {
-    .hero-section::before,
-    .glassmorphism::before,
-    .service-btn::before,
-    .option-card::before {
-        animation: none; /* Elimina animaciones en mobile */
-    }
-}
-
-/* TEXTO RESPONSIVE - Hero Section */
-.hero-title {
-    font-size: clamp(1.8rem, 6vw, 3rem) !important; /* Más pequeño en mobile */
-    line-height: 1.1 !important;
-}
-
-.hero-subtitle {
-    font-size: clamp(0.9rem, 3vw, 1.125rem) !important; /* Más pequeño en mobile */
-    line-height: 1.4 !important;
-}
-
-/* CARACTERÍSTICAS - Cards responsivas */
-.service-grid,
-.options-grid {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
-    gap: 16px !important;
-}
-
-/* BOTONES - Touch friendly */
-.nav-btn,
-.cta-button,
-.service-link {
-    min-height: 44px !important; /* Mínimo para touch */
-    padding: 12px 20px !important;
-}
-
-/* IMÁGENES - Prevenir overflow */
-img {
-    max-width: 100% !important;
-    height: auto !important;
-}
-
-.service-image {
-    width: 100% !important;
-    height: 200px !important;
-    object-fit: cover !important;
-}
-
-/* CARDS - Más compactas en mobile */
-.glassmorphism {
-    padding: 20px !important;
-    margin-bottom: 20px !important;
-}
-
-/* MEDIA QUERIES ESPECÍFICAS */
-
-/* Tablets y pantallas medianas */
-@media (max-width: 768px) {
-    .container {
-        padding: 0 12px !important;
+/* Tablet Portrait - Optimizaciones intermedias */
+@media screen and (max-width: 768px) {
+    /* Hero Section - Reducir tamaño pero mantener impacto */
+    .hero h1 {
+        font-size: clamp(2.2rem, 8vw, 3.8rem) !important;
+        line-height: 1.2 !important;
+        margin-bottom: 1rem !important;
     }
     
-    .hero-section {
-        padding: 60px 0 40px !important;
+    .hero p {
+        font-size: clamp(1rem, 4vw, 1.3rem) !important;
+        margin-bottom: 1.5rem !important;
     }
     
-    .hero-content {
-        padding: 24px 16px !important;
-    }
-    
-    /* Grid en una columna */
-    .service-grid,
-    .options-grid,
+    /* Features Grid - Mejor espaciado */
     .features-grid {
-        grid-template-columns: 1fr !important;
-        gap: 16px !important;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+        gap: 1.5rem !important;
+        padding: 0 1rem !important;
     }
     
-    /* Cards más compactas */
-    .service-btn,
-    .option-card,
     .feature-card {
-        padding: 16px !important;
+        padding: 1.8rem 1.5rem !important;
         min-height: auto !important;
     }
     
-    /* Iconos más pequeños */
-    .service-icon,
-    .option-icon {
-        width: 40px !important;
-        height: 40px !important;
+    .feature-icon {
+        width: 50px !important;
+        height: 50px !important;
+        margin-bottom: 1rem !important;
     }
     
-    .service-icon i,
-    .option-icon i {
-        font-size: 1.2rem !important;
+    /* Optimizar rendimiento en tablets */
+    .feature-card {
+        transition: transform 0.2s ease !important;
     }
     
-    /* Texto más pequeño */
-    .service-btn h3,
-    .option-card h4 {
-        font-size: 1rem !important;
-    }
-    
-    .service-btn p,
-    .option-card p {
-        font-size: 0.8rem !important;
-    }
-    
-    /* Secciones con menos padding */
-    .glassmorphism {
-        padding: 16px !important;
-        margin-bottom: 16px !important;
-    }
-    
-    .glassmorphism h2 {
-        font-size: 1.4rem !important;
-        margin-bottom: 16px !important;
+    .feature-card:hover {
+        transform: translateY(-3px) !important;
     }
 }
 
-/* Móviles pequeños */
-@media (max-width: 480px) {
+/* Mobile - Optimizaciones específicas para móviles */
+@media screen and (max-width: 480px) {
+    /* Container principal con mejor padding */
     .container {
-        padding: 0 8px !important;
+        padding: 0 1rem !important;
+        max-width: 100% !important;
     }
     
-    .hero-section {
-        padding: 40px 0 30px !important;
+    /* Hero Section - Tamaños móvil-first */
+    .hero {
+        padding: 3rem 0 !important;
+        text-align: center !important;
     }
     
-    .hero-content {
-        padding: 20px 12px !important;
+    .hero h1 {
+        font-size: clamp(1.8rem, 9vw, 2.8rem) !important;
+        line-height: 1.1 !important;
+        margin-bottom: 0.8rem !important;
+        padding: 0 0.5rem !important;
     }
     
-    /* Título hero aún más pequeño */
-    .hero-title {
-        font-size: clamp(1.5rem, 8vw, 2.5rem) !important;
-        margin-bottom: 16px !important;
+    .hero p {
+        font-size: clamp(0.9rem, 4.5vw, 1.1rem) !important;
+        margin-bottom: 1.2rem !important;
+        padding: 0 1rem !important;
+        line-height: 1.4 !important;
     }
     
-    .hero-subtitle {
-        font-size: clamp(0.8rem, 4vw, 1rem) !important;
-        margin-bottom: 20px !important;
+    /* Features Grid - Una sola columna en móvil */
+    .features-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.2rem !important;
+        padding: 0 0.5rem !important;
     }
     
-    /* Cards muy compactas */
-    .glassmorphism {
-        padding: 12px !important;
-        margin-bottom: 12px !important;
+    .feature-card {
+        padding: 1.5rem 1.2rem !important;
+        margin: 0 !important;
+        border-radius: 12px !important;
+        backdrop-filter: blur(8px) !important;
     }
     
-    .glassmorphism h2 {
-        font-size: 1.2rem !important;
-        margin-bottom: 12px !important;
+    .feature-card h3 {
+        font-size: 1.1rem !important;
+        margin-bottom: 0.5rem !important;
     }
     
-    .service-btn,
-    .option-card {
-        padding: 12px !important;
-        min-height: 120px !important;
+    .feature-card p {
+        font-size: 0.9rem !important;
+        line-height: 1.4 !important;
     }
     
-    /* Iconos más pequeños */
-    .service-icon,
-    .option-icon {
+    .feature-icon {
+        width: 42px !important;
+        height: 42px !important;
+        margin-bottom: 0.8rem !important;
+    }
+    
+    /* Imágenes - Prevenir cortes y desbordamiento */
+    .hero img,
+    .feature-card img,
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+        object-fit: cover !important;
+        object-position: center center !important;
+        border-radius: 8px !important;
+    }
+    
+    /* Botones - Touch-friendly */
+    .btn,
+    .cta-button,
+    button {
+        min-height: 48px !important;
+        padding: 12px 20px !important;
+        font-size: 16px !important;
+        border-radius: 8px !important;
+        margin: 0.5rem 0.2rem !important;
+    }
+    
+    /* Secciones con mejor espaciado */
+    section {
+        padding: 2rem 0 !important;
+    }
+    
+    /* Performance - Reducir animaciones complejas */
+    .feature-card {
+        transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 8px 25px rgba(0, 213, 99, 0.15) !important;
+    }
+    
+    /* Eliminamos animaciones muy complejas en móviles pequeños */
+    .hero-background,
+    .floating-elements {
+        animation: none !important;
+    }
+    
+    /* Tipografía consistente */
+    h2 {
+        font-size: clamp(1.5rem, 6vw, 2.2rem) !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    h3 {
+        font-size: clamp(1.1rem, 5vw, 1.4rem) !important;
+    }
+    
+    p {
+        font-size: clamp(0.9rem, 4vw, 1rem) !important;
+        line-height: 1.5 !important;
+    }
+}
+
+/* Mobile Muy Pequeño - Ajustes extra para pantallas pequeñas */
+@media screen and (max-width: 360px) {
+    .hero h1 {
+        font-size: 1.6rem !important;
+        padding: 0 0.2rem !important;
+    }
+    
+    .feature-card {
+        padding: 1.2rem 1rem !important;
+    }
+    
+    .feature-icon {
         width: 36px !important;
         height: 36px !important;
-        margin-bottom: 8px !important;
     }
     
-    .service-icon i,
-    .option-icon i {
-        font-size: 1rem !important;
+    .features-grid {
+        padding: 0 0.2rem !important;
     }
     
-    /* Formulario más compacto */
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-        padding: 10px 12px !important;
-        font-size: 0.9rem !important;
-    }
-    
-    .form-group label {
+    /* Texto más compacto */
+    .hero p {
         font-size: 0.85rem !important;
-        margin-bottom: 6px !important;
-    }
-    
-    /* Botón principal más pequeño */
-    .submit-btn {
-        padding: 14px 24px !important;
-        font-size: 0.9rem !important;
-    }
-    
-    /* Mapa más pequeño */
-    #map {
-        height: 250px !important;
-    }
-    
-    /* Precio más compacto */
-    .precio-total {
-        font-size: 1.5rem !important;
-    }
-    
-    .precio-desglose p {
-        font-size: 0.8rem !important;
-    }
-}
-
-/* OPTIMIZACIÓN DE RENDIMIENTO */
-@media (max-width: 768px) {
-    /* Reduce GPU usage en mobile */
-    .glassmorphism,
-    .service-btn,
-    .option-card {
-        transform: none !important;
-        transition: none !important;
-    }
-    
-    /* Simplifica hover effects */
-    .service-btn:hover,
-    .option-card:hover {
-        transform: none !important;
-        box-shadow: 0 2px 10px rgba(0, 213, 99, 0.2) !important;
-    }
-    
-    /* Reduce backdrop blur en mobile para mejor performance */
-    .glassmorphism {
-        backdrop-filter: blur(2px) !important;
-    }
-}
-
-/* LANDSCAPE MODE en móviles */
-@media (max-width: 768px) and (orientation: landscape) {
-    .hero-section {
-        padding: 30px 0 20px !important;
-    }
-    
-    .hero-title {
-        font-size: clamp(1.4rem, 5vw, 2rem) !important;
-        margin-bottom: 12px !important;
-    }
-    
-    .hero-subtitle {
-        font-size: clamp(0.8rem, 2.5vw, 0.9rem) !important;
-        margin-bottom: 16px !important;
-    }
-}
-
-/* POPUP RESPONSIVE */
-@media (max-width: 768px) {
-    .membership-popup .popup-content {
-        margin: 16px !important;
-        padding: 20px !important;
-        max-height: 85vh !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .membership-popup .popup-content {
-        margin: 8px !important;
-        padding: 16px !important;
-        max-height: 90vh !important;
+        padding: 0 0.5rem !important;
     }
 }
 </style>
@@ -2235,88 +1976,6 @@ img {
     </div>
 </section>
 
-<!-- SECCIÓN DE PARTNERS/TALLERES CON CARRUSEL ANIMADO -->
-<section class="partners-section">
-    <div class="container">
-        <div class="partners-header">
-            <h2>Nuestros Partners de Confianza</h2>
-            <p>Trabajamos con los mejores talleres y servicios automotrices de la región</p>
-        </div>
-        
-        <div class="partners-carousel-container">
-            <div class="partners-carousel">
-                <!-- Partner 1 -->
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/1a365d/ffffff?text=AutoCenter" alt="AutoCenter">
-                    <h4>AutoCenter Pro</h4>
-                </div>
-                
-                <!-- Partner 2 -->
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/2d3748/ffffff?text=MecaTaller" alt="MecaTaller">
-                    <h4>MecaTaller Express</h4>
-                </div>
-                
-                <!-- Partner 3 -->
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/4a5568/ffffff?text=Neumaticos" alt="Neumáticos">
-                    <h4>Neumáticos Plus</h4>
-                </div>
-                
-                <!-- Partner 4 -->
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/718096/ffffff?text=Frenos" alt="Frenos">
-                    <h4>Frenos & Suspensión</h4>
-                </div>
-                
-                <!-- Partner 5 -->
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/9ca3af/ffffff?text=Electrico" alt="Eléctrico">
-                    <h4>Auto Eléctrico</h4>
-                </div>
-                
-                <!-- Partner 6 -->
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/6b7280/ffffff?text=Pintura" alt="Pintura">
-                    <h4>Pintura & Chapa</h4>
-                </div>
-                
-                <!-- Partner 7 -->
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/374151/ffffff?text=Repuestos" alt="Repuestos">
-                    <h4>Repuestos Chile</h4>
-                </div>
-                
-                <!-- Partner 8 -->
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/1f2937/ffffff?text=Premium" alt="Premium">
-                    <h4>Premium Motors</h4>
-                </div>
-                
-                <!-- Duplicar partners para animación continua -->
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/1a365d/ffffff?text=AutoCenter" alt="AutoCenter">
-                    <h4>AutoCenter Pro</h4>
-                </div>
-                
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/2d3748/ffffff?text=MecaTaller" alt="MecaTaller">
-                    <h4>MecaTaller Express</h4>
-                </div>
-                
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/4a5568/ffffff?text=Neumaticos" alt="Neumáticos">
-                    <h4>Neumáticos Plus</h4>
-                </div>
-                
-                <div class="partner-card">
-                    <img src="https://via.placeholder.com/120x80/718096/ffffff?text=Frenos" alt="Frenos">
-                    <h4>Frenos & Suspensión</h4>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- Features Section -->
 <section class="features-section">
