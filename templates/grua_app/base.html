@@ -1031,7 +1031,10 @@
                <i class="fas fa-crown" style="color: #FFD700; font-size: 2rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);"></i>
                 <span>Grúa Style</span>
             </a>
-
+            <div class="service-status-indicator">
+    <div class="status-dot {{ clase_estado }}"></div>
+    <span class="status-text">{{ estado_servicio_texto }}</span>
+</div>
             <div class="nav-menu" id="navMenu">
                 <a href="{% url 'home' %}" class="nav-link">
                     <i class="fas fa-home"></i>
