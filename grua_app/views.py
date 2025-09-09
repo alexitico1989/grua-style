@@ -180,14 +180,6 @@ def home(request):
         except Exception as e:
             print(f"❌ Error obteniendo membresía en home: {e}")
     
-    # Agregar disponibilidad manualmente
-    try:
-        servicio_disponible = DisponibilidadServicio.esta_disponible()
-        estado_servicio_texto = 'DISPONIBLE' if servicio_disponible else 'NO DISPONIBLE'
-        clase_estado = 'active' if servicio_disponible else 'inactive'
-    except:
-        estado_servicio_texto = 'DISPONIBLE'
-        clase_estado = 'active'
     
     # Definir datos de planes con estructura completa (igual que en pago_membresia)
     planes_data = {
@@ -197,8 +189,6 @@ def home(request):
     context = {
         'membresia_activa': membresia_activa,
         'planes_data': json.dumps(planes_data),
-        'estado_servicio_texto': estado_servicio_texto,  # AGREGAR
-        'clase_estado': clase_estado,  # AGREGAR
     }
     
     return render(request, 'grua_app/home.html', context)
@@ -3041,11 +3031,3 @@ from django.db.models import Sum, Count, Q
 from django.utils import timezone
 from datetime import datetime, timedelta
 import calendar
-
-
-def disponibilidad_context(request):
-    """Context processor para disponibilidad del servicio"""
-    return {
-        'estado_servicio_texto': 'FORZADO_DISPONIBLE',
-        'clase_estado': 'active'
-    }
