@@ -1673,27 +1673,9 @@ function validateForm() {
     const patenteValida = patenteVehiculo.length >= 5;
     const descripcionValida = descripcionProblema.length >= 5; // Reducido de 10 a 5
     
-    // Validar campos de tarjeta si es necesario
+    // Validar campos de tarjeta - YA NO ES NECESARIO
     let tarjetaValida = true;
-    if (metodoPago === 'mercadopago_card') {
-        const numeroTarjeta = document.getElementById('numero_tarjeta').value.replace(/\s/g, '');
-        const fechaVencimiento = document.getElementById('fecha_vencimiento').value;
-        const cvv = document.getElementById('cvv').value;
-        const nombreTitular = document.getElementById('nombre_titular').value.trim();
-        
-        tarjetaValida = numeroTarjeta.length >= 13 && 
-                       fechaVencimiento.length === 5 && 
-                       cvv.length >= 3 && 
-                       nombreTitular.length >= 3;
-        
-        console.log('💳 Validación tarjeta:', {
-            numeroTarjeta: numeroTarjeta.length,
-            fechaVencimiento: fechaVencimiento.length,
-            cvv: cvv.length,
-            nombreTitular: nombreTitular.length,
-            tarjetaValida
-        });
-    }
+    // Siempre válido porque no pedimos datos de tarjeta
     
     let fechaValida = true;
     if (tipoServicio === 'programado') {
