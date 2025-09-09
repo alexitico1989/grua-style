@@ -1618,12 +1618,12 @@ function selectOption(categoria, valor) {
         });
         
         if (valor === 'mercadopago_card') {
-            document.getElementById('pago_mercadopago_card').checked = true;
-            document.getElementById('pasarela-pago').style.display = 'block';
-        } else {
-            document.getElementById(`pago_${valor}`).checked = true;
-            document.getElementById('pasarela-pago').style.display = 'none';
-        }
+        document.getElementById('pago_mercadopago_card').checked = true;
+    } else {
+        document.getElementById(`pago_${valor}`).checked = true;
+    }
+    // Siempre ocultar pasarela de pago
+    document.getElementById('pasarela-pago').style.display = 'none';
         document.getElementById('hidden_metodo_pago').value = valor;
         event.currentTarget.classList.add('selected');
     }

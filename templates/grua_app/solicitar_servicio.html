@@ -2195,13 +2195,11 @@ function selectOption(categoria, valor) {
         // Marcar el radio button y agregar clase selected
         if (valor === 'mercadopago_card') {
             document.getElementById('pago_mercadopago_card').checked = true;
-            // Mostrar pasarela de pago
-            document.getElementById('pasarela-pago').style.display = 'block';
         } else {
             document.getElementById(`pago_${valor}`).checked = true;
-            // Ocultar pasarela de pago
-            document.getElementById('pasarela-pago').style.display = 'none';
         }
+        // Siempre ocultar pasarela de pago
+        document.getElementById('pasarela-pago').style.display = 'none';
         document.getElementById('hidden_metodo_pago').value = valor;
         event.currentTarget.classList.add('selected');
     }
