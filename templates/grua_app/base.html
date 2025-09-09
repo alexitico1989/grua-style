@@ -1032,7 +1032,13 @@
                 <span>Grúa Style</span>
             </a>
 
-            <div class="service-status-indicator">
+            <!-- DEBUG TEMPORAL -->
+<div style="background: red; color: white; padding: 5px; font-size: 12px;">
+    DEBUG: estado_servicio_texto = "{{ estado_servicio_texto|default:'VACIO' }}"
+    clase_estado = "{{ clase_estado|default:'VACIO' }}"
+</div>
+
+<div class="service-status-indicator">
     <div class="status-dot {{ clase_estado }}"></div>
     <span class="status-text">{{ estado_servicio_texto }}</span>
 </div>
