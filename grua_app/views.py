@@ -180,10 +180,133 @@ def home(request):
         except Exception as e:
             print(f"❌ Error obteniendo membresía en home: {e}")
     
-    
-    # Definir datos de planes con estructura completa (igual que en pago_membresia)
+    # Definir datos de planes con estructura completa
     planes_data = {
-        # ... todo tu código de planes_data existente ...
+        'basica': {
+            'nombre': 'Básica',
+            'duraciones': {
+                '3': {
+                    'precio': 59990,
+                    'precio_mensual': 19997,
+                    'detalles': [
+                        'Tarifa base: $25.000',
+                        'Tarifa por Km: $1.300',
+                        'Descuento del 10%',
+                        'Soporte prioritario'
+                    ],
+                    'periodo': 'por 3 meses'
+                },
+                '6': {
+                    'precio': 109990,
+                    'precio_mensual': 18332,
+                    'detalles': [
+                        '1 Viaje Gratis región metropolitana',
+                        'Tarifa base: $25.000',
+                        'Tarifa por Km: $1.300',
+                        'Descuento del 10%',
+                        'Soporte prioritario'
+                    ],
+                    'periodo': 'por 6 meses'
+                },
+                '12': {
+                    'precio': 199990,
+                    'precio_mensual': 16666,
+                    'detalles': [
+                        '3 Viajes Gratis región metropolitana',
+                        'Tarifa base: $25.000',
+                        'Tarifa por Km: $1.300',
+                        'Descuento del 10%',
+                        'Soporte prioritario'
+                    ],
+                    'periodo': 'por 1 año'
+                }
+            }
+        },
+        'pro': {
+            'nombre': 'Pro',
+            'duraciones': {
+                '3': {
+                    'precio': 99990,
+                    'precio_mensual': 33330,
+                    'detalles': [
+                        '1 Viaje a mitad de precio',
+                        'Tarifa base: $20.000',
+                        'Tarifa por Km: $1.300',
+                        'Sin tarifa mínima',
+                        'Descuento del 20%'
+                    ],
+                    'periodo': 'por 3 meses'
+                },
+                '6': {
+                    'precio': 189990,
+                    'precio_mensual': 31665,
+                    'detalles': [
+                        '2 viajes gratis región metropolitana',
+                        'Tarifa base: $20.000',
+                        'Tarifa por Km: $1.300',
+                        'Sin tarifa mínima',
+                        'Descuento del 20%'
+                    ],
+                    'periodo': 'por 6 meses'
+                },
+                '12': {
+                    'precio': 349000,
+                    'precio_mensual': 29083,
+                    'detalles': [
+                        '5 viajes gratis región metropolitana',
+                        'Un servicio de revisión técnica a domicilio',
+                        'Taza de regalo',
+                        'Tarifa base: $20.000',
+                        'Sin tarifa mínima'
+                    ],
+                    'periodo': 'por 1 año'
+                }
+            }
+        },
+        'premium': {
+            'nombre': 'Premium',
+            'duraciones': {
+                '3': {
+                    'precio': 299000,
+                    'precio_mensual': 99667,
+                    'detalles': [
+                        '2 viajes gratis región metropolitana',
+                        '2 viajes precio fijo $20.000',
+                        'Tarifa base: $20.000',
+                        'Tarifa por Km: $1.200',
+                        'Sin tarifa mínima',
+                        'Descuento del 30%'
+                    ],
+                    'periodo': 'por 3 meses'
+                },
+                '6': {
+                    'precio': 549000,
+                    'precio_mensual': 91500,
+                    'detalles': [
+                        '4 viajes gratis región metropolitana',
+                        '3 viajes precio fijo $20.000',
+                        'Tarifa base: $20.000',
+                        'Tarifa por Km: $1.200',
+                        'Sin tarifa mínima',
+                        'Descuento del 30%'
+                    ],
+                    'periodo': 'por 6 meses'
+                },
+                '12': {
+                    'precio': 999000,
+                    'precio_mensual': 83250,
+                    'detalles': [
+                        '10 viajes gratis región metropolitana',
+                        '10 viajes precio fijo $20.000',
+                        'Un servicio de revisión técnica a domicilio',
+                        'Taza de regalo',
+                        'Asistencia prioritaria',
+                        'Descuento del 30%'
+                    ],
+                    'periodo': 'por 1 año'
+                }
+            }
+        }
     }
     
     context = {
