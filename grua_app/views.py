@@ -3187,3 +3187,11 @@ from django.db.models import Sum, Count, Q
 from django.utils import timezone
 from datetime import datetime, timedelta
 import calendar
+
+
+def disponibilidad_context(request):
+    """Context processor inline para testing"""
+    return {
+        'estado_servicio_texto': 'DISPONIBLE_TEST',
+        'clase_estado': 'active'
+    }
