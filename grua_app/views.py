@@ -751,10 +751,28 @@ def solicitar_asistencia(request):
                 print(f"🔧 Asistencia mecánica: Tarifa fija ${costo_total}")
             
             solicitud.costo_total = costo_total
-            solicitud.save()
 
-            # LÍNEA AGREGADA - Formatear fechas para corregir timezone
-            solicitud = formatear_fechas_solicitud(solicitud)
+            # DEBUG TIMEZONE
+            print(f"🔧 DEBUG TIMEZONE - ANTES DE CORRECCIÓN:")
+            print(f"   Fecha servicio antes: {solicitud.fecha_servicio}")
+            print(f"   Timezone antes: {solicitud.fecha_servicio.tzinfo if solicitud.fecha_servicio else 'None'}")
+
+            if solicitud.fecha_servicio:
+                from django.utils import timezone
+                import zoneinfo
+                
+                chile_tz = zoneinfo.ZoneInfo('America/Santiago')
+                if solicitud.fecha_servicio.tzinfo is None:
+                    print("   Aplicando timezone Chile (sin timezone)")
+                    solicitud.fecha_servicio = solicitud.fecha_servicio.replace(tzinfo=chile_tz)
+                elif solicitud.fecha_servicio.tzinfo != chile_tz:
+                    print("   Convirtiendo a timezone Chile")
+                    solicitud.fecha_servicio = solicitud.fecha_servicio.astimezone(chile_tz)
+                
+                print(f"   Fecha servicio después: {solicitud.fecha_servicio}")
+                print(f"   Timezone después: {solicitud.fecha_servicio.tzinfo}")
+
+            solicitud.save()
 
             try:
                 from .notifications import enviar_notificacion_nueva_solicitud

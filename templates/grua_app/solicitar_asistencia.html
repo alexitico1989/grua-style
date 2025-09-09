@@ -1518,7 +1518,7 @@ function selectService(tipo) {
         document.getElementById('fecha_hora').value = '';
         
         const ahora = new Date();
-        const fechaActual = ahora.toISOString().slice(0, 16);
+        const fechaActual = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
         document.getElementById('hidden_fecha_hora').value = fechaActual;
     }
     
@@ -1648,7 +1648,7 @@ function validateForm() {
     } else {
         // Para servicio inmediato, establecer fecha actual
         const ahora = new Date();
-        const fechaActual = ahora.toISOString().slice(0, 16);
+        const fechaActual = new Date(ahora.getTime() - ahora.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
         document.getElementById('hidden_fecha_hora').value = fechaActual;
     }
     
