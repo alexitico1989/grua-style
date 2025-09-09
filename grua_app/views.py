@@ -3154,3 +3154,19 @@ from django.db.models import Sum, Count, Q
 from django.utils import timezone
 from datetime import datetime, timedelta
 import calendar
+
+def disponibilidad_context(request):
+    """Context processor para disponibilidad del servicio"""
+    try:
+        from .models import DisponibilidadServicio
+        servicio_disponible = DisponibilidadServicio.esta_disponible()
+        return {
+            'estado_servicio_texto': 'DISPONIBLE' if servicio_disponible else 'NO DISPONIBLE',
+            'clase_estado': 'active' if servicio_disponible else 'inactive'
+        }
+    except Exception as e:
+        print(f"Error en context processor: {e}")
+        return {
+            'estado_servicio_texto': 'DISPONIBLE',
+            'clase_estado': 'active'
+        }
