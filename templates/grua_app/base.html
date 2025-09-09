@@ -1031,6 +1031,12 @@
                <i class="fas fa-crown" style="color: #FFD700; font-size: 2rem; text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);"></i>
                 <span>Grúa Style</span>
             </a>
+
+            <!-- DEBUG TEMPORAL - AGREGAR AQUÍ -->
+<div style="color: red; font-size: 12px; background: white; padding: 2px;">
+    DEBUG: {{ estado_servicio_texto|default:"VARIABLE_VACIA" }} - {{ clase_estado|default:"CLASE_VACIA" }}
+</div>
+
             <div class="service-status-indicator">
     <div class="status-dot {{ clase_estado }}"></div>
     <span class="status-text">{{ estado_servicio_texto }}</span>
