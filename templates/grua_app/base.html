@@ -1032,13 +1032,6 @@
                 <span>Grúa Style</span>
             </a>
 
-            <!-- DEBUG TEMPORAL -->
-<div style="color: red; font-size: 12px; background: white; padding: 2px;">
-    DEBUG: {{ estado_servicio_texto|default:"VARIABLE_VACIA" }} - {{ clase_estado|default:"CLASE_VACIA" }}
-    <br>SETTINGS DEBUG: {{ settings.DEBUG|default:"NO_DEBUG" }}
-    <br>USER: {{ user.username|default:"ANONIMO" }}
-</div>
-
             <div class="service-status-indicator">
     <div class="status-dot {{ clase_estado }}"></div>
     <span class="status-text">{{ estado_servicio_texto }}</span>
