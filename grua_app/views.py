@@ -124,43 +124,21 @@ def obtener_tarifas_usuario(user):
     return tarifas_default
 
 def formatear_fechas_solicitud(solicitud):
-    """Formateo inteligente según origen de la fecha"""
+    """Formateo simplificado usando timezone.localtime"""
     try:
         from django.utils import timezone
-        from datetime import timedelta
         
-        print(f"🔍 DEBUG formatear_fechas_solicitud:")
+        print(f"DEBUG formatear_fechas_solicitud:")
         print(f"   Solicitud: {solicitud.numero_orden}")
         print(f"   Fecha servicio original: {solicitud.fecha_servicio}")
-        print(f"   Fecha solicitud: {solicitud.fecha_solicitud}")
         
         # Fecha de solicitud - siempre usar localtime
         if solicitud.fecha_solicitud:
             solicitud.fecha_solicitud_formateada = timezone.localtime(solicitud.fecha_solicitud).strftime('%d/%m/%Y %H:%M')
         
-        # Fecha de servicio - formateo inteligente
+        # Fecha de servicio - usar localtime sin correcciones
         if solicitud.fecha_servicio:
-            # Detectar si es servicio inmediato vs programado
-            diferencia_horas = abs((solicitud.fecha_servicio - solicitud.fecha_solicitud).total_seconds() / 3600)
-            print(f"   Diferencia horas: {diferencia_horas}")
-            
-            if diferencia_horas < 2:  # Servicio inmediato
-                print("   Detectado como INMEDIATO")
-                hora_actual = timezone.now()
-                diferencia_con_ahora = abs((solicitud.fecha_servicio - hora_actual).total_seconds() / 3600)
-                print(f"   Diferencia con ahora: {diferencia_con_ahora}")
-                
-                if diferencia_con_ahora > 2:
-                    print("   Aplicando corrección -3h")
-                    fecha_corregida = solicitud.fecha_servicio - timedelta(hours=3)
-                    solicitud.fecha_servicio_formateada = fecha_corregida.strftime('%d/%m/%Y %H:%M')
-                else:
-                    print("   Sin corrección")
-                    solicitud.fecha_servicio_formateada = solicitud.fecha_servicio.strftime('%d/%m/%Y %H:%M')
-            else:  # Servicio programado
-                print("   Detectado como PROGRAMADO")
-                solicitud.fecha_servicio_formateada = timezone.localtime(solicitud.fecha_servicio).strftime('%d/%m/%Y %H:%M')
-            
+            solicitud.fecha_servicio_formateada = timezone.localtime(solicitud.fecha_servicio).strftime('%d/%m/%Y %H:%M')
             print(f"   Fecha servicio formateada: {solicitud.fecha_servicio_formateada}")
         
         return solicitud
@@ -652,6 +630,17 @@ def solicitar_servicio(request):
                 costo_total = tarifa_minima
             
             solicitud.costo_total = costo_total
+            if solicitud.fecha_servicio:
+                from django.utils import timezone
+                import zoneinfo
+                
+                chile_tz = zoneinfo.ZoneInfo('America/Santiago')
+                if solicitud.fecha_servicio.tzinfo is None:
+                    # Si no tiene timezone, asumimos que es hora local Chile
+                    solicitud.fecha_servicio = solicitud.fecha_servicio.replace(tzinfo=chile_tz)
+                elif solicitud.fecha_servicio.tzinfo != chile_tz:
+                    # Si tiene otro timezone, convertir a Chile
+                    solicitud.fecha_servicio = solicitud.fecha_servicio.astimezone(chile_tz)
             solicitud.save()
             # Guardar tarifas aplicadas para el desglose
             solicitud.tarifa_base_aplicada = tarifa_base
