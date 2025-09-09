@@ -180,171 +180,25 @@ def home(request):
         except Exception as e:
             print(f"❌ Error obteniendo membresía en home: {e}")
     
+    # Agregar disponibilidad manualmente
+    try:
+        servicio_disponible = DisponibilidadServicio.esta_disponible()
+        estado_servicio_texto = 'DISPONIBLE' if servicio_disponible else 'NO DISPONIBLE'
+        clase_estado = 'active' if servicio_disponible else 'inactive'
+    except:
+        estado_servicio_texto = 'DISPONIBLE'
+        clase_estado = 'active'
+    
     # Definir datos de planes con estructura completa (igual que en pago_membresia)
     planes_data = {
-        'basica': {
-            'nombre': 'Básica',
-            'duraciones': {
-                '3': {
-                    'precio': 59990,
-                    'precio_mensual': 19997,  # 59990 / 3
-                    'detalles': [
-                        'Servicio 24/7',
-                        '2 servicios incluidos por mes',
-                        'Descuento 10% en servicios extra',
-                        'Soporte básico',
-                        'Tarifa base: $25.000',
-                        'Tarifa x Km: $1.300'
-                    ],
-                    'periodo': '3 meses'
-                },
-                '6': {
-                    'precio': 109990,
-                    'precio_mensual': 18332,  # 109990 / 6
-                    'detalles': [
-                        'Servicio 24/7',
-                        '1 Viaje Gratis región metropolitana',
-                        '2 servicios incluidos por mes', 
-                        'Descuento 10% en servicios extra',
-                        'Soporte básico',
-                        'Tarifa base: $25.000',
-                        'Tarifa x Km: $1.300'
-                    ],
-                    'periodo': '6 meses'
-                },
-                '12': {
-                    'precio': 199990,
-                    'precio_mensual': 16666,  # 199990 / 12
-                    'detalles': [
-                        'Servicio 24/7',
-                        '3 Viajes Gratis región metropolitana',
-                        '2 servicios incluidos por mes',
-                        'Descuento 10% en servicios extra', 
-                        'Soporte básico',
-                        'Tarifa base: $25.000',
-                        'Tarifa x Km: $1.300'
-                    ],
-                    'periodo': '1 año'
-                }
-            }
-        },
-        'pro': {
-            'nombre': 'Pro',
-            'duraciones': {
-                '3': {
-                    'precio': 99990,
-                    'precio_mensual': 33330,  # 99990 / 3
-                    'detalles': [
-                        'Servicio 24/7 prioritario',
-                        '1 Viaje a mitad de precio región metropolitana',
-                        '5 servicios incluidos por mes',
-                        'Descuento 20% en servicios extra',
-                        'Soporte premium',
-                        'Tarifa base: $20.000',
-                        'Tarifa x Km: $1.300',
-                        'Sin tarifa mínima'
-                    ],
-                    'periodo': '3 meses'
-                },
-                '6': {
-                    'precio': 189990,
-                    'precio_mensual': 31665,  # 189990 / 6
-                    'detalles': [
-                        'Servicio 24/7 prioritario',
-                        '2 viajes gratis región metropolitana',
-                        '5 servicios incluidos por mes',
-                        'Descuento 20% en servicios extra',
-                        'Soporte premium',
-                        'Tarifa base: $20.000',
-                        'Tarifa x Km: $1.300',
-                        'Sin tarifa mínima'
-                    ],
-                    'periodo': '6 meses'
-                },
-                '12': {
-                    'precio': 349000,
-                    'precio_mensual': 29083,  # 349000 / 12
-                    'detalles': [
-                        'Servicio 24/7 prioritario',
-                        '5 viajes gratis región metropolitana',
-                        'Un servicio de revisión técnica a domicilio',
-                        '5 servicios incluidos por mes',
-                        'Descuento 20% en servicios extra',
-                        'Soporte premium',
-                        'Taza de regalo',
-                        'Tarifa base: $20.000',
-                        'Tarifa x Km: $1.300',
-                        'Sin tarifa mínima'
-                    ],
-                    'periodo': '1 año'
-                }
-            }
-        },
-        'premium': {
-            'nombre': 'Premium',
-            'duraciones': {
-                '3': {
-                    'precio': 299000,
-                    'precio_mensual': 99667,  # 299000 / 3
-                    'detalles': [
-                        'Servicio exclusivo 24/7',
-                        '2 viajes gratis región metropolitana',
-                        '2 viajes precio fijo $20.000 toda RM',
-                        'Servicios ilimitados por mes',
-                        'Descuento 30% en servicios extra',
-                        'Soporte VIP dedicado',
-                        'Seguimiento GPS avanzado',
-                        'Tarifa base: $20.000',
-                        'Tarifa x Km: $1.200',
-                        'Sin tarifa mínima'
-                    ],
-                    'periodo': '3 meses'
-                },
-                '6': {
-                    'precio': 549000,
-                    'precio_mensual': 91500,  # 549000 / 6
-                    'detalles': [
-                        'Servicio exclusivo 24/7',
-                        '4 viajes gratis región metropolitana',
-                        '3 viajes precio fijo $20.000 toda RM',
-                        'Servicios ilimitados por mes',
-                        'Descuento 30% en servicios extra',
-                        'Soporte VIP dedicado',
-                        'Seguimiento GPS avanzado',
-                        'Tarifa base: $20.000',
-                        'Tarifa x Km: $1.200',
-                        'Sin tarifa mínima'
-                    ],
-                    'periodo': '6 meses'
-                },
-                '12': {
-                    'precio': 999000,
-                    'precio_mensual': 83250,  # 999000 / 12
-                    'detalles': [
-                        'Servicio exclusivo 24/7',
-                        '10 viajes gratis región metropolitana',
-                        '10 viajes precio fijo $20.000 toda RM',
-                        'Un servicio de revisión técnica a domicilio',
-                        'Servicios ilimitados por mes',
-                        'Descuento 30% en servicios extra',
-                        'Soporte VIP dedicado',
-                        'Beneficios exclusivos',
-                        'Seguimiento GPS avanzado',
-                        'Taza de regalo',
-                        'Asistencia prioritaria',
-                        'Tarifa base: $20.000',
-                        'Tarifa x Km: $1.200',
-                        'Sin tarifa mínima'
-                    ],
-                    'periodo': '1 año'
-                }
-            }
-        }
+        # ... todo tu código de planes_data existente ...
     }
     
     context = {
         'membresia_activa': membresia_activa,
-        'planes_data': json.dumps(planes_data)  # Convertir a JSON para JavaScript
+        'planes_data': json.dumps(planes_data),
+        'estado_servicio_texto': estado_servicio_texto,  # AGREGAR
+        'clase_estado': clase_estado,  # AGREGAR
     }
     
     return render(request, 'grua_app/home.html', context)
