@@ -1,0 +1,737 @@
+{% extends 'grua_app/base.html' %}
+{% load static %}
+
+{% block title %}Revisiones Técnicas a Domicilio - Grúa Style{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Variables para contexto web/app */
+    :root {
+        --content-padding-bottom: 40px;
+    }
+    
+    @media (display-mode: standalone) {
+        :root {
+            --content-padding-bottom: 100px;
+        }
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background: #000;
+        color: #ffffff;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Container principal */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        padding-bottom: var(--content-padding-bottom);
+    }
+    
+    /* Hero section con efectos glassmorphism */
+    .hero-section {
+        background: #000;
+        padding: 80px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 30% 50%, rgba(0, 213, 99, 0.1) 0%, transparent 50%);
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 800px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 60px 40px;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+    }
+    
+    .hero-content::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 213, 99, 0.1),
+            transparent
+        );
+        animation: shimmer 5s infinite;
+    }
+    
+    .hero-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        margin-bottom: 20px;
+        line-height: 1.2;
+        text-shadow: 0 0 20px rgba(0, 213, 99, 0.3);
+        color: #ffffff;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.125rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+        margin: 0;
+    }
+    
+    /* Services Section con glassmorphism */
+    .services-section {
+        padding: 80px 0;
+        background: #0a0a0a;
+    }
+    
+    .section-title {
+        text-align: center;
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 700;
+        margin-bottom: 80px;
+        color: #ffffff;
+        text-shadow: 0 0 20px rgba(0, 213, 99, 0.3);
+        position: relative;
+        z-index: 2;
+    }
+    
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 32px;
+        max-width: 1000px;
+        margin: 0 auto;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .service-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 32px 24px;
+        text-align: center;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .service-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 213, 99, 0.1),
+            transparent
+        );
+        animation: shimmer 6s infinite;
+    }
+    
+    .service-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(0, 213, 99, 0.3);
+        box-shadow: 0 20px 40px rgba(0, 213, 99, 0.15);
+    }
+    
+    .service-icon {
+        width: 64px;
+        height: 64px;
+        background: #00D563;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px auto;
+        font-size: 1.8rem;
+        color: #000;
+        box-shadow: 0 10px 30px rgba(0, 213, 99, 0.3);
+        animation: icon-pulse 3s ease-in-out infinite;
+    }
+    
+    .service-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 16px;
+        color: #00D563;
+        text-shadow: 0 0 10px rgba(0, 213, 99, 0.2);
+    }
+    
+    .service-description {
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+    }
+    
+    /* Pricing Section con glassmorphism */
+    .pricing-section {
+        background: #000;
+        padding: 120px 0;
+        position: relative;
+    }
+    
+    .pricing-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 70% 50%, rgba(0, 213, 99, 0.05) 0%, transparent 50%);
+    }
+    
+    .pricing-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 40px;
+        max-width: 800px;
+        margin: 0 auto;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .pricing-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 213, 99, 0.1),
+            transparent
+        );
+        animation: shimmer 4s infinite;
+    }
+    
+    .price-tag {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #00D563;
+        margin-bottom: 16px;
+        text-shadow: 0 0 20px rgba(0, 213, 99, 0.4);
+        text-align: center;
+    }
+    
+    .price-description {
+        color: #ccc;
+        margin-bottom: 32px;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+    
+    .features-list {
+        list-style: none;
+        padding: 0;
+        margin: 32px 0;
+        text-align: left;
+    }
+    
+    .features-list li {
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .features-list li:last-child {
+        border-bottom: none;
+    }
+    
+    .features-list i {
+        color: #00D563;
+        width: 20px;
+        text-align: center;
+    }
+    
+    /* WhatsApp Section con glassmorphism */
+    .whatsapp-section {
+        background: #0a0a0a;
+        padding: 120px 0;
+        position: relative;
+    }
+    
+    .whatsapp-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 30% 50%, rgba(0, 213, 99, 0.05) 0%, transparent 50%);
+    }
+    
+    .whatsapp-card {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        padding: 40px;
+        backdrop-filter: blur(5px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 2;
+        overflow: hidden;
+    }
+    
+    .whatsapp-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 213, 99, 0.1),
+            transparent
+        );
+        animation: shimmer 4s infinite;
+    }
+    
+    .whatsapp-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .btn-whatsapp {
+        background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+        border: none;
+        border-radius: 16px;
+        padding: 18px 36px;
+        color: white;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);
+        position: relative;
+        overflow: hidden;
+        margin-top: 24px;
+    }
+    
+    .btn-whatsapp::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+        );
+        animation: shimmer 3s infinite;
+    }
+    
+    .btn-whatsapp:hover {
+        background: linear-gradient(135deg, #20B859 0%, #25D366 100%);
+        color: white;
+        transform: translateY(-4px);
+        box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4);
+        text-decoration: none;
+    }
+    
+    /* FAQ Section con glassmorphism */
+    .faq-section {
+        padding: 80px 0;
+        background: #000;
+    }
+    
+    .faq-item {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        margin-bottom: 20px;
+        backdrop-filter: blur(5px);
+        overflow: hidden;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        position: relative;
+    }
+    
+    .faq-item::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(0, 213, 99, 0.1),
+            transparent
+        );
+        animation: shimmer 6s infinite;
+    }
+    
+    .faq-item:hover {
+        transform: translateY(-2px);
+        border-color: rgba(0, 213, 99, 0.3);
+        box-shadow: 0 12px 40px rgba(0, 213, 99, 0.15);
+    }
+    
+    .faq-question {
+        padding: 24px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .faq-question:hover {
+        background: rgba(0, 213, 99, 0.1);
+    }
+    
+    .faq-question h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #00D563;
+        margin: 0;
+        text-shadow: 0 0 8px rgba(0, 213, 99, 0.2);
+    }
+    
+    .faq-answer {
+        padding: 0 24px 24px 24px;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.6;
+        display: none;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .faq-answer.active {
+        display: block;
+    }
+    
+    /* Animaciones */
+    @keyframes shimmer {
+        0% {
+            left: -100%;
+        }
+        100% {
+            left: 100%;
+        }
+    }
+    
+    @keyframes icon-pulse {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 10px 30px rgba(0, 213, 99, 0.3);
+        }
+        50% {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 213, 99, 0.5);
+        }
+    }
+    
+    /* Responsive */
+    @media (max-width: 968px) {
+        .services-grid {
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .container {
+            padding: 16px;
+        }
+        
+        .hero-section {
+            padding: 60px 0;
+        }
+        
+        .hero-content {
+            padding: 40px 24px;
+        }
+        
+        .services-section,
+        .pricing-section,
+        .whatsapp-section,
+        .faq-section {
+            padding: 60px 0;
+        }
+        
+        .service-card,
+        .pricing-card,
+        .whatsapp-card {
+            padding: 25px 20px;
+        }
+        
+        .section-title {
+            margin-bottom: 60px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .hero-content {
+            padding: 32px 20px;
+        }
+        
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .service-card,
+        .pricing-card,
+        .whatsapp-card {
+            padding: 24px 20px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">Revisiones Técnicas a Domicilio</h1>
+            <p class="hero-subtitle">
+                Realizamos tu revisión técnica donde te encuentres. Técnicos certificados, 
+                documentación oficial y la comodidad de no salir de casa.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="services-section">
+    <div class="container">
+        <h2 class="section-title">Detalles del servicio</h2>
+        
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3 class="service-title">Revisión Anual</h3>
+                <p class="service-description">
+                    Inspección visual requerida por ley. Incluye verificación 
+                    de sistemas de seguridad, luces y documentación.
+                </p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-smog"></i>
+                </div>
+                <h3 class="service-title">Revisión de Gases</h3>
+                <p class="service-description">
+                    Revisión de emisiones contaminantes. Verificación del sistema 
+                    de escape según normativa vigente.
+                </p>
+            </div>
+            
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <h3 class="service-title">Revisión Completa</h3>
+                <p class="service-description">
+                    Inspección integral que incluye revisión anual, sistemas y 
+                    verificación adicional de componentes críticos del vehículo.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="pricing-section">
+    <div class="container">
+        <h2 class="section-title">Precios y Servicios Incluidos</h2>
+        
+        <div class="pricing-card">
+            <div class="price-tag">Precio Único $50.000</div>
+            <p class="price-description">Revisión técnica completa a domicilio</p>
+            
+            <ul class="features-list">
+                <li>
+                    <i class="fas fa-check"></i>
+                    <span>Técnico certificado se desplaza a tu ubicación</span>
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    <span>Inspección completa del vehículo</span>
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    <span>Documentación oficial de la planta de revisión técnica</span>
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    <span>Verificación de sistemas de seguridad</span>
+                </li>
+                <li>
+                    <i class="fas fa-check"></i>
+                    <span>Atención personalizada</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- WhatsApp Section -->
+<section class="whatsapp-section">
+    <div class="container">
+        <div class="whatsapp-card">
+            <div class="whatsapp-content">
+                <h2 class="section-title">¿Listo para Agendar tu Revisión?</h2>
+                <p style="color: #ccc; margin-bottom: 2rem; font-size: 1.1rem;">
+                    Contáctanos por WhatsApp para coordinar tu revisión técnica a domicilio. 
+                    Te responderemos inmediatamente para agendar el día y hora que mejor te convenga.
+                </p>
+                
+                <a href="https://wa.me/56989085315?text=Hola,%20quiero%20agendar%20una%20revisión%20técnica%20a%20domicilio.%20¿Podrían%20darme%20información%20sobre%20disponibilidad%20y%20precios?" 
+                   target="_blank" 
+                   class="btn-whatsapp">
+                    <i class="fab fa-whatsapp" style="font-size: 1.3rem;"></i>
+                    Agendar por WhatsApp
+                </a>
+                
+                <p style="color: rgba(255, 255, 255, 0.6); margin-top: 1rem; font-size: 0.9rem;">
+                    Horario de atención: Lunes a Viernes 8:00 - 18:00 hrs - sábados 8:00 a 12:00
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+    <div class="container">
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>¿Qué documentos necesito para la revisión técnica?</h3>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Necesitas tener disponible el permiso de circulación vigente, cédula de identidad del propietario 
+                y seguro obligatorio al día. Nuestro técnico verificará estos documentos antes de iniciar la inspección.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>¿Cuánto tiempo demora la revisión?</h3>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Una revisión técnica completa varia dependiendo de como se encuentre el servicio en la planta de revisión técnica. Esto incluye la inspección visual, 
+                verificación de sistemas y emisión de la documentación correspondiente.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>¿En qué comunas realizan el servicio?</h3>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Realizamos revisiones técnicas a domicilio en toda la Región Metropolitana. 
+                Contáctanos para confirmar disponibilidad en tu comuna específica.
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">
+                <h3>¿Qué pasa si mi vehículo no aprueba la revisión?</h3>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Si tu vehículo no aprueba, te entregamos un informe detallado con las observaciones a corregir. 
+                Puedes reparar los problemas y reagendar una nueva revisión.
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+function toggleFaq(element) {
+    const answer = element.nextElementSibling;
+    const icon = element.querySelector('i');
+    
+    // Cerrar todas las otras FAQ
+    document.querySelectorAll('.faq-answer').forEach(item => {
+        if (item !== answer) {
+            item.classList.remove('active');
+        }
+    });
+    
+    document.querySelectorAll('.faq-question i').forEach(item => {
+        if (item !== icon) {
+            item.style.transform = 'rotate(0deg)';
+        }
+    });
+    
+    // Toggle la FAQ actual
+    answer.classList.toggle('active');
+    
+    if (answer.classList.contains('active')) {
+        icon.style.transform = 'rotate(180deg)';
+    } else {
+        icon.style.transform = 'rotate(0deg)';
+    }
+}
+</script>
+{% endblock %}
