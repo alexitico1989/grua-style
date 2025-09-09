@@ -3190,8 +3190,18 @@ import calendar
 
 
 def disponibilidad_context(request):
-    """Context processor inline para testing"""
-    return {
-        'estado_servicio_texto': 'DISPONIBLE_TEST',
-        'clase_estado': 'active'
-    }
+    """Context processor para disponibilidad del servicio"""
+    try:
+        from .models import DisponibilidadServicio
+        
+        servicio_disponible = DisponibilidadServicio.esta_disponible()
+        return {
+            'estado_servicio_texto': 'DISPONIBLE' if servicio_disponible else 'NO DISPONIBLE',
+            'clase_estado': 'active' if servicio_disponible else 'inactive'
+        }
+    except Exception as e:
+        # Valores por defecto en caso de error
+        return {
+            'estado_servicio_texto': 'DISPONIBLE',
+            'clase_estado': 'active'
+        }
