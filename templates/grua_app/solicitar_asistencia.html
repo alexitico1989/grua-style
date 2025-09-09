@@ -1037,6 +1037,49 @@ button#btn-enviar.submit-btn:disabled {
     </div>
 </section>
 
+<!-- Sección de WhatsApp para Camiones en Asistencia (oculta por defecto) -->
+<section id="whatsapp-camion" class="glassmorphism" style="display: none;">
+    <h2>
+        <i class="fas fa-truck" style="margin-right: 10px; font-size: 0.9em;"></i>
+        Asistencia para Camión
+    </h2>
+    
+    <div style="text-align: center; padding: 2rem;">
+        <div style="background: rgba(255, 152, 0, 0.1); border: 1px solid rgba(255, 152, 0, 0.3); border-radius: 20px; padding: 2rem; margin-bottom: 2rem;">
+            <i class="fas fa-truck" style="font-size: 3rem; color: #FF9800; margin-bottom: 1rem;"></i>
+            <h3 style="color: #FF9800; margin-bottom: 1rem;">Asistencia Especializada</h3>
+            <p style="color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem; line-height: 1.6;">
+                Para asistencia mecánica en camiones, nuestros técnicos especializados evalúan cada caso individualmente para brindar el mejor servicio.
+            </p>
+        </div>
+        
+        <a href="https://wa.me/56989085315?text=Hola,%20necesito%20asistencia%20mecánica%20para%20camión" 
+           target="_blank" 
+           id="btn-whatsapp-camion" 
+           style="background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); 
+                  border: none; 
+                  border-radius: 25px; 
+                  padding: 1.2rem 2.5rem; 
+                  color: white; 
+                  font-size: 1.1rem; 
+                  font-weight: 600; 
+                  text-decoration: none; 
+                  display: inline-flex; 
+                  align-items: center; 
+                  gap: 10px; 
+                  cursor: pointer; 
+                  transition: all 0.3s ease; 
+                  box-shadow: 0 8px 25px rgba(37, 211, 102, 0.3);">
+            <i class="fab fa-whatsapp" style="font-size: 1.3rem;"></i>
+            Contactar por WhatsApp
+        </a>
+        
+        <p style="color: rgba(255, 255, 255, 0.6); margin-top: 1rem; font-size: 0.9rem;">
+            Te responderemos inmediatamente para coordinar la asistencia
+        </p>
+    </div>
+</section>
+
 <!-- Ubicación del Servicio -->
 <section class="glassmorphism">
     <h2>
@@ -1549,6 +1592,25 @@ function selectOption(categoria, valor) {
         document.getElementById('hidden_tipo_vehiculo').value = valor;
         event.currentTarget.classList.add('selected');
         
+        // NUEVA LÓGICA PARA CAMIONES EN ASISTENCIA MECÁNICA
+        if (valor === 'camion') {
+            // Mostrar sección de WhatsApp
+            document.getElementById('whatsapp-camion').style.display = 'block';
+            
+            // Ocultar las secciones restantes del formulario
+            ocultarSeccionesFormulario();
+            
+            console.log('🚛 Modo camión activado en asistencia - WhatsApp mostrado, formulario oculto');
+        } else {
+            // Ocultar sección de WhatsApp
+            document.getElementById('whatsapp-camion').style.display = 'none';
+            
+            // Mostrar las secciones del formulario
+            mostrarSeccionesFormulario();
+            
+            console.log('🔧 Modo vehículo normal activado en asistencia - formulario completo visible');
+        }
+        
     } else if (categoria === 'pago') {
         document.querySelectorAll('.option-card').forEach(card => {
             const input = card.querySelector('input[name="metodo_pago"]');
@@ -1739,6 +1801,45 @@ function handleFormSubmit(e) {
     
     // Enviar formulario
     document.getElementById('formulario-servicio').submit();
+}
+
+// Funciones para ocultar/mostrar secciones cuando se selecciona camión en asistencia
+function ocultarSeccionesFormulario() {
+    // Ocultar secciones específicas del formulario
+    const secciones = document.querySelectorAll('.glassmorphism');
+    secciones.forEach(seccion => {
+        const titulo = seccion.querySelector('h2');
+        if (titulo) {
+            const textoTitulo = titulo.textContent.trim();
+            if (textoTitulo.includes('Ubicación del Servicio') || 
+                textoTitulo.includes('Método de Pago') || 
+                textoTitulo.includes('Datos del Cliente') || 
+                textoTitulo.includes('Información del Vehículo')) {
+                seccion.style.display = 'none';
+            }
+        }
+    });
+    
+    console.log('📱 Secciones del formulario ocultadas para modo camión en asistencia');
+}
+
+function mostrarSeccionesFormulario() {
+    // Mostrar todas las secciones del formulario
+    const secciones = document.querySelectorAll('.glassmorphism');
+    secciones.forEach(seccion => {
+        const titulo = seccion.querySelector('h2');
+        if (titulo) {
+            const textoTitulo = titulo.textContent.trim();
+            if (textoTitulo.includes('Ubicación del Servicio') || 
+                textoTitulo.includes('Método de Pago') || 
+                textoTitulo.includes('Datos del Cliente') || 
+                textoTitulo.includes('Información del Vehículo')) {
+                seccion.style.display = 'block';
+            }
+        }
+    });
+    
+    console.log('📋 Secciones del formulario mostradas para modo normal en asistencia');
 }
 
 console.log('✅ Script de asistencia mecánica cargado completamente');
