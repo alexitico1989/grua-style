@@ -3174,3 +3174,9 @@ def disponibilidad_context(request):
 def revisiones_tecnicas(request):
     """Vista para la página de revisiones técnicas a domicilio"""
     return render(request, 'grua_app/revisiones_tecnicas.html')
+
+def terminos(request):
+    return render(request, 'grua_app/terminos.html')
+
+def politicas(request):
+    return render(request, 'grua_app/politicas.html')

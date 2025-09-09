@@ -1,0 +1,452 @@
+{% extends 'grua_app/base.html' %}
+{% load static %}
+
+{% block title %}Términos y Condiciones - Grúa Style{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Variables para contexto web/app */
+    :root {
+        --content-padding-bottom: 40px;
+    }
+    
+    @media (display-mode: standalone) {
+        :root {
+            --content-padding-bottom: 100px;
+        }
+    }
+    
+    .legal-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 40px 20px var(--content-padding-bottom);
+        min-height: calc(100vh - 140px);
+    }
+    
+    .legal-header {
+        text-align: center;
+        margin-bottom: 50px;
+        position: relative;
+    }
+    
+    .legal-header::before {
+        content: '';
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 4px;
+        background: linear-gradient(90deg, #00D563 0%, #00ff75 100%);
+        border-radius: 2px;
+    }
+    
+    .legal-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 16px;
+        text-shadow: 0 0 20px rgba(0, 213, 99, 0.3);
+    }
+    
+    .legal-header .subtitle {
+        color: #999;
+        font-size: 1.1rem;
+        font-weight: 400;
+    }
+    
+    .legal-content {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .legal-content::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at 20% 80%, rgba(0, 213, 99, 0.1) 0%, transparent 50%);
+        pointer-events: none;
+    }
+    
+    .legal-section {
+        margin-bottom: 40px;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .legal-section h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #00D563;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .legal-section h2 i {
+        font-size: 1.3rem;
+        opacity: 0.8;
+    }
+    
+    .legal-section h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 25px 0 15px 0;
+    }
+    
+    .legal-section p {
+        color: #ccc;
+        line-height: 1.7;
+        margin-bottom: 16px;
+        font-size: 0.95rem;
+    }
+    
+    .legal-section ul {
+        list-style: none;
+        margin: 16px 0;
+        padding-left: 0;
+    }
+    
+    .legal-section li {
+        color: #ccc;
+        margin-bottom: 12px;
+        padding-left: 24px;
+        position: relative;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+    
+    .legal-section li::before {
+        content: '•';
+        color: #00D563;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    
+    .highlight-box {
+        background: rgba(0, 213, 99, 0.1);
+        border: 1px solid rgba(0, 213, 99, 0.3);
+        border-radius: 12px;
+        padding: 20px;
+        margin: 25px 0;
+    }
+    
+    .highlight-box h4 {
+        color: #00D563;
+        font-weight: 600;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .highlight-box p {
+        margin-bottom: 8px;
+    }
+    
+    .contact-info {
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        padding: 25px 0;
+        margin-top: 30px;
+        text-align: center;
+    }
+    
+    .contact-info h3 {
+        color: #00D563;
+        margin-bottom: 15px;
+    }
+    
+    .contact-details {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+    }
+    
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #ccc;
+        font-size: 0.9rem;
+    }
+    
+    .contact-item i {
+        color: #00D563;
+        width: 18px;
+        text-align: center;
+    }
+    
+    .last-updated {
+        text-align: center;
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        color: #666;
+        font-size: 0.85rem;
+    }
+    
+    @media (max-width: 768px) {
+        .legal-container {
+            padding: 30px 16px var(--content-padding-bottom);
+        }
+        
+        .legal-header h1 {
+            font-size: 2rem;
+        }
+        
+        .legal-content {
+            padding: 25px 20px;
+        }
+        
+        .legal-section h2 {
+            font-size: 1.3rem;
+        }
+        
+        .contact-details {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .legal-header h1 {
+            font-size: 1.7rem;
+        }
+        
+        .legal-content {
+            padding: 20px 16px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="legal-container">
+    <div class="legal-header">
+        <h1>Términos y Condiciones</h1>
+        <p class="subtitle">Grúa Style - Servicios de Grúa y Asistencia Mecánica</p>
+    </div>
+    
+    <div class="legal-content">
+        <div class="legal-section">
+            <h2><i class="fas fa-info-circle"></i>1. Información General</h2>
+            <p>Los presentes Términos y Condiciones regulan el uso del sitio web y la contratación de servicios de Grúa Style, empresa individual de responsabilidad limitada constituida en Chile, dedicada a la prestación de servicios de grúa, asistencia mecánica y revisiones técnicas a domicilio.</p>
+            
+            <h3>1.1 Datos de la Empresa</h3>
+            <ul>
+                <li><strong>Razón Social:</strong> Grúa Style E.I.R.L.</li>
+                <li><strong>RUT:</strong> [RUT de la empresa]</li>
+                <li><strong>Domicilio:</strong> Santiago, Región Metropolitana, Chile</li>
+                <li><strong>Teléfono:</strong> +56 9 8908 5315</li>
+                <li><strong>Email:</strong> contacto@gruastyle.com</li>
+            </ul>
+        </div>
+        
+        <div class="legal-section">
+            <h2><i class="fas fa-handshake"></i>2. Aceptación de los Términos</h2>
+            <p>Al acceder y utilizar nuestro sitio web, o al contratar cualquiera de nuestros servicios, usted acepta expresamente estos Términos y Condiciones. Si no está de acuerdo con alguno de estos términos, debe abstenerse de utilizar nuestros servicios.</p>
+            
+            <div class="highlight-box">
+                <h4><i class="fas fa-exclamation-triangle"></i>Importante</h4>
+                <p>Estos términos constituyen un contrato legalmente vinculante entre usted y Grúa Style, regido por las leyes de la República de Chile.</p>
+            </div>
+        </div>
+        
+        <div class="legal-section">
+            <h2><i class="fas fa-truck"></i>3. Descripción de Servicios</h2>
+            
+            <h3>3.1 Servicios de Grúa</h3>
+            <ul>
+                <li>Traslado de vehículos livianos (autos, camionetas, motocicletas)</li>
+                <li>Servicios de grúa para camiones (cotización especializada)</li>
+                <li>Servicios inmediatos y programados</li>
+                <li>Cobertura en la Región Metropolitana</li>
+            </ul>
+            
+            <h3>3.2 Asistencia Mecánica</h3>
+            <ul>
+                <li>Servicios de batería (carga y reemplazo)</li>
+                <li>Apertura de vehículos (llaves dentro)</li>
+                <li>Entrega de combustible</li>
+                <li>Revisión básica de fallas mecánicas</li>
+            </ul>
+            
+            <h3>3.3 Revisiones Técnicas</h3>
+            <ul>
+                <li>Revisiones técnicas a domicilio</li>
+                <li>Inspección completa del vehículo</li>
+                <li>Documentación oficial</li>
+            </ul>
+        </div>
+        
+        <div class="legal-section">
+            <h2><i class="fas fa-dollar-sign"></i>4. Precios y Formas de Pago</h2>
+            
+            <h3>4.1 Tarifas</h3>
+            <p>Los precios de nuestros servicios están publicados en nuestro sitio web y pueden variar según:</p>
+            <ul>
+                <li>Tipo de vehículo</li>
+                <li>Distancia del traslado</li>
+                <li>Horario del servicio (nocturno, festivos)</li>
+                <li>Urgencia del servicio</li>
+                <li>Condiciones especiales del terreno o acceso</li>
+            </ul>
+            
+            <h3>4.2 Formas de Pago</h3>
+            <ul>
+                <li>Efectivo al momento del servicio</li>
+                <li>Transferencia bancaria</li>
+                <li>Tarjetas de débito y crédito</li>
+                <li>Sistemas de pago electrónico</li>
+            </ul>
+            
+            <div class="highlight-box">
+                <h4><i class="fas fa-clock"></i>Política de Cancelación</h4>
+                <p>Las cancelaciones deben realizarse con al menos 30 minutos de antelación. Cancelaciones tardías pueden generar un cargo del 50% del valor del servicio.</p>
+            </div>
+        </div>
+        
+        <div class="legal-section">
+            <h2><i class="fas fa-shield-alt"></i>5. Responsabilidad y Limitaciones</h2>
+            
+            <h3>5.1 Responsabilidad de Grúa Style</h3>
+            <p>Grúa Style se compromete a:</p>
+            <ul>
+                <li>Prestar servicios con personal capacitado y equipos en buen estado</li>
+                <li>Mantener seguros de responsabilidad civil vigentes</li>
+                <li>Cumplir con los horarios acordados en la medida de lo posible</li>
+                <li>Manejar los vehículos con el debido cuidado profesional</li>
+            </ul>
+            
+            <h3>5.2 Limitaciones de Responsabilidad</h3>
+            <p>Conforme al artículo 1547 del Código Civil de Chile, nuestra responsabilidad se limita a:</p>
+            <ul>
+                <li>Daños directos causados por dolo o culpa grave de nuestro personal</li>
+                <li>Valor comercial del vehículo trasladado (con tope máximo según seguro)</li>
+                <li>No nos responsabilizamos por objetos de valor dejados en el interior del vehículo</li>
+                <li>Daños preexistentes en el vehículo</li>
+                <li>Demoras causadas por fuerza mayor o caso fortuito</li>
+            </ul>
+            
+            <h3>5.3 Exclusiones</h3>
+            <p>Grúa Style no será responsable por:</p>
+            <ul>
+                <li>Daños causados por condiciones climáticas adversas</li>
+                <li>Restricciones de tránsito no previstas</li>
+                <li>Fallas mecánicas del vehículo durante el traslado</li>
+                <li>Objetos personales no declarados</li>
+                <li>Modificaciones no autorizadas en el vehículo</li>
+            </ul>
+        </div>
+        
+        <div class="legal-section">
+            <h2><i class="fas fa-user-shield"></i>6. Obligaciones del Cliente</h2>
+            
+            <h3>6.1 Información Veraz</h3>
+            <ul>
+                <li>Proporcionar información exacta sobre el vehículo y ubicación</li>
+                <li>Declarar cualquier condición especial del vehículo</li>
+                <li>Informar sobre objetos de valor en el interior</li>
+                <li>Proporcionar documentación del vehículo cuando sea requerida</li>
+            </ul>
+            
+            <h3>6.2 Presencia en el Lugar</h3>
+            <ul>
+                <li>Estar presente al momento de la prestación del servicio</li>
+                <li>Facilitar el acceso al vehículo y zona de trabajo</li>
+                <li>Verificar el estado del vehículo antes y después del servicio</li>
+                <li>Firmar la conformidad del servicio prestado</li>
+            </ul>
+        </div>
+        
+        <div class="legal-section">
+            <h2><i class="fas fa-gavel"></i>7. Jurisdicción y Ley Aplicable</h2>
+            <p>Los presentes Términos y Condiciones se rigen por las leyes de la República de Chile. Cualquier controversia será sometida a la jurisdicción de los Tribunales Ordinarios de Justicia de Santiago, Chile.</p>
+            
+            <h3>7.1 Legislación Aplicable</h3>
+            <ul>
+                <li>Código Civil de Chile</li>
+                <li>Ley N° 19.496 sobre Protección de los Derechos de los Consumidores</li>
+                <li>Ley N° 18.290 de Tránsito</li>
+                <li>Ley N° 19.628 sobre Protección de Datos Personales</li>
+            </ul>
+        </div>
+        
+        <div class="legal-section">
+            <h2><i class="fas fa-exclamation-circle"></i>8. Fuerza Mayor</h2>
+            <p>Grúa Style no será responsable por el incumplimiento de sus obligaciones cuando este se deba a causas de fuerza mayor o caso fortuito, incluyendo pero no limitándose a:</p>
+            <ul>
+                <li>Fenómenos naturales (terremotos, inundaciones, etc.)</li>
+                <li>Disturbios civiles o manifestaciones</li>
+                <li>Cortes de energía o telecomunicaciones</li>
+                <li>Restricciones gubernamentales</li>
+                <li>Pandemias o emergencias sanitarias</li>
+            </ul>
+        </div>
+        
+        <div class="legal-section">
+            <h2><i class="fas fa-edit"></i>9. Modificaciones</h2>
+            <p>Grúa Style se reserva el derecho de modificar estos Términos y Condiciones en cualquier momento. Las modificaciones serán notificadas a través de nuestro sitio web con al menos 7 días de antelación y entrarán en vigor automáticamente.</p>
+            
+            <div class="highlight-box">
+                <h4><i class="fas fa-bell"></i>Notificación de Cambios</h4>
+                <p>Es responsabilidad del usuario revisar periódicamente estos términos. El uso continuado de nuestros servicios implica la aceptación de las modificaciones.</p>
+            </div>
+        </div>
+        
+        <div class="legal-section">
+            <h2><i class="fas fa-comments"></i>10. Resolución de Conflictos</h2>
+            
+            <h3>10.1 Procedimiento de Reclamos</h3>
+            <ul>
+                <li>Los reclamos deben presentarse por escrito dentro de 48 horas</li>
+                <li>Incluir toda la documentación respaldatoria</li>
+                <li>Grúa Style responderá en un plazo máximo de 5 días hábiles</li>
+            </ul>
+            
+            <h3>10.2 Mediación</h3>
+            <p>En caso de controversias, las partes se comprometen a intentar una solución a través de mediación antes de recurrir a los tribunales, conforme a la Ley N° 19.968.</p>
+        </div>
+        
+        <div class="contact-info">
+            <h3>Contacto para Consultas Legales</h3>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>legal@gruastyle.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>+56 9 8908 5315</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Santiago, Chile</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="last-updated">
+            <p><strong>Última actualización:</strong> Enero de 2025</p>
+            <p>Versión 1.0</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

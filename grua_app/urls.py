@@ -103,6 +103,10 @@ urlpatterns = [
     # Revisiones técnicas
     path('revisiones-tecnicas/', views.revisiones_tecnicas, name='revisiones_tecnicas'),
 
+    #terminos y condiciones
+    path('terminos-y-condiciones/', views.terminos, name='terminos'),
+    path('politica-de-privacidad/', views.politicas, name='politicas'),
+
     # Perfil de usuario
     path('perfil/', views.perfil, name='perfil'),
     path('editar-perfil/', views.editar_perfil, name='editar_perfil'),
