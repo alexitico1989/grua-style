@@ -364,6 +364,52 @@
             margin-left: 0;
             margin-top: 0.25rem;
         }
+
+        .instructions {
+        padding: 1rem;
+        margin: 1rem 0;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+    
+        .instructions h5 {
+            font-size: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .instructions ol {
+            padding-left: 1rem;
+            margin: 0;
+        }
+        
+        .instructions li {
+            margin-bottom: 0.75rem;
+            line-height: 1.6;
+            font-size: 0.9rem;
+            word-break: break-word;
+            white-space: normal;
+        }
+        
+        /* ESPECÍFICO PARA EL NÚMERO DE ORDEN EN EL CONCEPTO */
+        .instructions li:nth-child(2) {
+            word-break: break-all;
+            overflow-wrap: anywhere;
+        }
+    }
+
+    /* AGREGAR TAMBIÉN ESTE BREAKPOINT ADICIONAL PARA PANTALLAS MUY PEQUEÑAS */
+    @media (max-width: 480px) {
+        .instructions {
+            padding: 0.75rem;
+            font-size: 0.85rem;
+        }
+        
+        .instructions li {
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+    }
+
     }
 </style>
 {% endblock %}
