@@ -20,6 +20,16 @@ from transbank.webpay.webpay_plus.transaction import Transaction
 from transbank.common.integration_type import IntegrationType
 from datetime import timedelta
 
+from utils.telegram_notifications import (
+    send_telegram_notification, 
+    format_grua_notification, 
+    format_asistencia_notification
+)
+from datetime import datetime
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 try:
     from transbank.common.options import WebpayOptions
@@ -620,6 +630,32 @@ def solicitar_servicio(request):
                 enviar_notificacion_nueva_solicitud(solicitud)
             except Exception as e:
                 print(f"Error enviando notificación: {e}")
+            
+            # Enviar notificación de Telegram para grúa
+            try:
+                notification_data = {
+                    'numero_orden': solicitud.numero_orden,
+                    'nombre': solicitud.cliente.get_full_name() or solicitud.cliente.username,
+                    'username': solicitud.cliente.username,
+                    'marca_vehiculo': request.POST.get('marca_vehiculo', ''),
+                    'modelo_vehiculo': request.POST.get('modelo_vehiculo', ''),
+                    'tipo_vehiculo': solicitud.tipo_vehiculo,
+                    'tipo_servicio': request.POST.get('tipo_servicio', 'Inmediato'),
+                    'metodo_pago': solicitud.metodo_pago,
+                    'direccion_origen': solicitud.direccion_origen,
+                    'direccion_destino': solicitud.direccion_destino,
+                    'comentarios': request.POST.get('comentarios') or 'Solicitud de servicio de grúa',
+                    'costo_total': int(solicitud.costo_total),
+                    'estado': solicitud.estado,
+                    'fecha_servicio': solicitud.fecha_servicio.strftime('%d/%m/%Y %H:%M') if solicitud.fecha_servicio else 'No especificada',
+                    'admin_url': f"https://gruastyle.com/admin/grua_app/solicitudservicio/{solicitud.id}/change/",
+                }
+                
+                message = format_grua_notification(notification_data)
+                send_telegram_notification(message)
+                
+            except Exception as e:
+                logger.error(f"Error al enviar notificación de grúa a Telegram: {str(e)}")
 
             # 📧 Enviar email de comprobante
             if EMAIL_UTILS_AVAILABLE:
@@ -746,6 +782,32 @@ def solicitar_asistencia(request):
                 enviar_notificacion_nueva_solicitud(solicitud)
             except Exception as e:
                 print(f"Error enviando notificación: {e}")
+
+                # Enviar notificación de Telegram para asistencia mecánica
+            try:
+                notification_data = {
+                    'numero_orden': solicitud.numero_orden,
+                    'nombre': solicitud.cliente.get_full_name() or solicitud.cliente.username,
+                    'username': solicitud.cliente.username,
+                    'marca_vehiculo': request.POST.get('marca_vehiculo', ''),
+                    'modelo_vehiculo': request.POST.get('modelo_vehiculo', ''),
+                    'tipo_vehiculo': solicitud.tipo_vehiculo,
+                    'tipo_problema': request.POST.get('tipo_problema', 'No especificado'),
+                    'tipo_servicio': request.POST.get('tipo_servicio', 'Inmediato'),
+                    'metodo_pago': solicitud.metodo_pago,
+                    'direccion': solicitud.direccion_origen,
+                    'comentarios': request.POST.get('comentarios') or 'Sin comentarios',
+                    'costo_total': int(solicitud.costo_total),
+                    'estado': solicitud.estado,
+                    'fecha_servicio': solicitud.fecha_servicio.strftime('%d/%m/%Y %H:%M') if solicitud.fecha_servicio else 'No especificada',
+                    'admin_url': f"https://gruastyle.com/admin/grua_app/solicitudservicio/{solicitud.id}/change/",
+                }
+                
+                message = format_asistencia_notification(notification_data)
+                send_telegram_notification(message)
+                
+            except Exception as e:
+                logger.error(f"Error al enviar notificación de asistencia a Telegram: {str(e)}")
 
             # 📧 Enviar email de comprobante
             if EMAIL_UTILS_AVAILABLE:

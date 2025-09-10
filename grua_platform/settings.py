@@ -6,6 +6,14 @@ from pathlib import Path
 import os
 import dj_database_url
 
+from pathlib import Path
+import os
+import dj_database_url
+
+# Cargar variables de entorno desde .env
+# from dotenv import load_dotenv
+# load_dotenv()
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -204,11 +212,9 @@ NOTIFICATIONS_ADMIN_EMAIL = 'monardes.luis@gmail.com'  # CAMBIA POR TU EMAIL REA
 # SISTEMA DE NOTIFICACIONES TELEGRAM
 # ========================================
 
-# Token del bot de Telegram (obtenido de @BotFather)
-TELEGRAM_BOT_TOKEN = '8379152044:AAHoS8b2RCdZ2SBGENvVkIlYT3RpmqXjuE8'  # Reemplazar con el token real
-
-# Chat ID del administrador (obtenido de @userinfobot)
-TELEGRAM_ADMIN_CHAT_ID = '6810175002'  # Reemplazar con tu chat ID
+# Telegram Bot Configuration - VALORES HARDCODEADOS PARA TESTING
+TELEGRAM_BOT_TOKEN = '8379152044:AAHoS8b2RCdZ2SBGENvVkIlYT3RpmqXjuE8'
+TELEGRAM_CHAT_ID = '6810175002'
 
 # ========================================
 # CONFIGURACIÓN PARA PRODUCCIÓN
