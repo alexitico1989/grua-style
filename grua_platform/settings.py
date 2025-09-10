@@ -34,9 +34,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'grua_app',
+    'rest_framework', 
+    'corsheaders',     
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # ← AGREGADO PARA SERVIR ESTÁTICOS
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -242,3 +246,34 @@ if 'RAILWAY_ENVIRONMENT' in os.environ:
     print("🚀 MODO PRODUCCIÓN ACTIVADO")
 else:
     print("💻 MODO DESARROLLO LOCAL")
+
+# Django REST Framework Configuration
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+}
+
+# JWT Configuration
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,
+}
+
+# CORS Configuration para app móvil
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # React Native Metro
+    "http://127.0.0.1:3000",
+    "capacitor://localhost",  # Capacitor
+    "ionic://localhost",      # Ionic
+]
+
+CORS_ALLOW_CREDENTIALS = True
