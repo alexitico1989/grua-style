@@ -160,3 +160,8 @@ print(f"🔍 DEBUG: {DEBUG}")
 print(f"🔍 DATABASE: {DATABASES['default']['ENGINE']}")
 print(f"🔍 ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 print(f"🔍 BASE_HOST: {BASE_HOST}")
+
+# URLs de autenticación - AGREGAR AL FINAL
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/'

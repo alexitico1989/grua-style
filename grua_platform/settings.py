@@ -23,7 +23,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-your-secret-key-here'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.1.4', '*']
 
 # Application definition
 INSTALLED_APPS = [
@@ -272,8 +272,23 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React Native Metro
     "http://127.0.0.1:3000",
+    "http://192.168.1.4:8081",
     "capacitor://localhost",  # Capacitor
     "ionic://localhost",      # Ionic
+]
+
+# También agrega estas líneas para permitir todos los métodos:
+CORS_ALLOW_ALL_ORIGINS = True  # Solo para desarrollo
+CORS_ALLOWED_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
