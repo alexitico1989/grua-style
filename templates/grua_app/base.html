@@ -598,35 +598,7 @@
             color: #00D563;
         }
         
-        /* BOTÓN FLOTANTE CORREGIDO - SIN CONFLICTO CON FA- */
-        .floating-action-btn {
-            position: fixed;
-            bottom: 90px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #00D563;
-            box-shadow: 0 4px 20px rgba(0, 213, 99, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: #000;
-            font-size: 1.5rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            z-index: 999;
-            border: none;
-        }
-        
-        .floating-action-btn:hover {
-            background: #00B853;
-            transform: scale(1.1);
-            box-shadow: 0 6px 25px rgba(0, 213, 99, 0.6);
-            color: #000;
-            text-decoration: none;
-        }
+    
         
         /* ANIMACIONES */
         @keyframes slideInRight {
@@ -1321,11 +1293,6 @@
     </footer>
 
     
-
-    <!-- Botón flotante de acción rápida - SIN CONFLICTO -->
-    <a href="{% url 'solicitar_servicio' %}" class="floating-action-btn" title="Solicitar Grúa">
-        <i class="fas fa-plus"></i>
-    </a>
 
     <!-- Scripts -->
     <script>
