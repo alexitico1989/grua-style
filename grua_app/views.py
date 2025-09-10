@@ -648,7 +648,7 @@ def solicitar_servicio(request):
                     'costo_total': int(solicitud.costo_total),
                     'estado': solicitud.estado,
                     'fecha_servicio': solicitud.fecha_servicio.strftime('%d/%m/%Y %H:%M') if solicitud.fecha_servicio else 'No especificada',
-                    'admin_url': f"https://gruastyle.com/admin/grua_app/solicitudservicio/{solicitud.id}/change/",
+                    'admin_url': f"https://www.gruastyle.com/admin/grua_app/solicitudservicio/{solicitud.id}/change/",
                 }
                 
                 message = format_grua_notification(notification_data)
@@ -800,7 +800,7 @@ def solicitar_asistencia(request):
                     'costo_total': int(solicitud.costo_total),
                     'estado': solicitud.estado,
                     'fecha_servicio': solicitud.fecha_servicio.strftime('%d/%m/%Y %H:%M') if solicitud.fecha_servicio else 'No especificada',
-                    'admin_url': f"https://gruastyle.com/admin/grua_app/solicitudservicio/{solicitud.id}/change/",
+                    'admin_url': f"https://www.gruastyle.com/admin/grua_app/solicitudservicio/{solicitud.id}/change/",
                 }
                 
                 message = format_asistencia_notification(notification_data)
