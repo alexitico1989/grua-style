@@ -1,7 +1,12 @@
 {% extends 'grua_app/base.html' %}
 {% load static %}
 
-{% block title %}Grúa Style - Precios Transparentes{% endblock %}
+{% block title %}Precios de Grúas en Santiago - Tarifas Transparentes | Grúa Style{% endblock %}
+
+{% block extra_meta %}
+<meta name="description" content="Precios claros para servicios de grúa en Santiago. $30.000 base + $1.500/km. Calculadora online gratuita. Sin costos ocultos.">
+<meta name="keywords" content="precios gruas santiago, tarifas gruas, costo grua santiago, gruas economicas precios">
+{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -1362,6 +1367,52 @@ document.getElementById('distance').addEventListener('keypress', function(e) {
         calculatePrice();
     }
 });
+</script>
+
+<!-- Schema Markup para SEO Local -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Grúa Style",
+  "description": "Servicio de grúas en Santiago 24 horas. Traslado de vehículos, asistencia mecánica y rescate vial en toda la Región Metropolitana.",
+  "url": "https://www.gruastyle.com",
+  "telephone": "+56989085315",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Santiago",
+    "addressRegion": "Región Metropolitana",
+    "addressCountry": "CL"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -33.4489,
+    "longitude": -70.6693
+  },
+  "openingHours": "Mo-Su 00:00-23:59",
+  "priceRange": "$$",
+  "serviceType": ["Servicio de grúas", "Traslado de vehículos", "Asistencia vial", "Rescate vehicular"],
+  "areaServed": {
+    "@type": "State",
+    "name": "Región Metropolitana de Santiago"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servicios de Grúa",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Servicio de Grúa Base",
+          "description": "Traslado de vehículos en Santiago"
+        },
+        "price": "30000",
+        "priceCurrency": "CLP"
+      }
+    ]
+  }
+}
 </script>
 
 {% endblock %}

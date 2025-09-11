@@ -1,7 +1,16 @@
 {% extends 'grua_app/base.html' %}
 {% load static %}
 
-{% block title %}Grúa Style - Servicio 24/7{% endblock %}
+{% block title %}Grúa Style - Servicio de Grúas en Santiago 24/7 | Tarifas Transparentes{% endblock %}
+
+{% block extra_meta %}
+<meta name="description" content="Servicio de grúas en Santiago las 24 horas. Calcula tu tarifa online, pago seguro con MercadoPago. Cobertura toda la RM. ¡Solicita tu grúa ahora!">
+<meta name="keywords" content="gruas santiago, servicio gruas, gruas 24 horas, traslado autos santiago, gruas economicas">
+<meta property="og:title" content="Grúa Style - Servicio de Grúas en Santiago 24/7">
+<meta property="og:description" content="Servicio de grúas en Santiago las 24 horas. Calcula tu tarifa online, pago seguro con MercadoPago.">
+<meta property="og:url" content="https://www.gruastyle.com">
+<meta property="og:type" content="website">
+{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -1715,11 +1724,11 @@
                 <h1 class="hero-title" id="heroTitle">
                     <span class="hero-title-3d">
                         <div class="hero-title-line">
-                            <span class="word-servicio">Servicio</span>
-                            <span class="word-de">de</span>
-                            <span class="word-grua">Grúa</span>
+                            <span class="word-servicio">Grúas en</span>
+                            <span class="word-de">Santiago</span>
+                            <span class="word-grua">24/7</span>
                         </div>
-                        <span class="hero-highlight">24/7</span>
+                        <span class="hero-highlight">Servicio Confiable</span>
                     </span>
                 </h1>
                 <p class="hero-subtitle">
@@ -1837,7 +1846,7 @@
 <section class="features-section">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">¿Por qué elegir Grúa Style?</h2>
+            <h2 class="section-title">¿Por qué elegir nuestro Servicio de Grúas en Santiago?</h2>
             <p class="section-subtitle">
                 Tecnología moderna y servicio personalizado para la mejor experiencia en servicios de grúa.
             </p>
@@ -1917,7 +1926,7 @@
 <section class="pricing-section">
     <div class="container">
         <div class="section-header">
-            <h2 class="section-title">Tarifas Transparentes</h2>
+            <h2 class="section-title">Precios de Grúas en Santiago - Tarifas Transparentes</h2>
             <p class="section-subtitle">
                 Conoce nuestras tarifas antes de solicitar el servicio
             </p>
@@ -2272,4 +2281,51 @@ function selectPlan(planType, duration) {
     closeModal();
 }
 </script>
+
+<!-- Schema Markup para SEO Local -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Grúa Style",
+  "description": "Servicio de grúas en Santiago 24 horas. Traslado de vehículos, asistencia mecánica y rescate vial en toda la Región Metropolitana.",
+  "url": "https://www.gruastyle.com",
+  "telephone": "+56989085315",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Santiago",
+    "addressRegion": "Región Metropolitana",
+    "addressCountry": "CL"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -33.4489,
+    "longitude": -70.6693
+  },
+  "openingHours": "Mo-Su 00:00-23:59",
+  "priceRange": "$$",
+  "serviceType": ["Servicio de grúas", "Traslado de vehículos", "Asistencia vial", "Rescate vehicular"],
+  "areaServed": {
+    "@type": "State",
+    "name": "Región Metropolitana de Santiago"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Servicios de Grúa",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Servicio de Grúa Base",
+          "description": "Traslado de vehículos en Santiago"
+        },
+        "price": "30000",
+        "priceCurrency": "CLP"
+      }
+    ]
+  }
+}
+</script>
+
 {% endblock %}
