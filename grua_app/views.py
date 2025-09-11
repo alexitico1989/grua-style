@@ -15,6 +15,7 @@ import uuid
 import traceback
 import json
 
+
 # Imports de Transbank
 from transbank.webpay.webpay_plus.transaction import Transaction
 from transbank.common.integration_type import IntegrationType
@@ -3242,3 +3243,85 @@ def terminos(request):
 
 def politicas(request):
     return render(request, 'grua_app/politicas.html')
+
+# Agregar al final de grua_app/views.py
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import json
+from datetime import datetime
+
+@csrf_exempt
+def api_solicitar_servicio(request):
+    """API endpoint para crear solicitudes desde la app móvil"""
+    print(f"📱 API llamada recibida: {request.method}")
+    
+    if request.method == 'GET':
+        return JsonResponse({'message': 'Endpoint funcionando - usar POST para enviar datos'})
+    
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Método no permitido'}, status=405)
+    
+    try:
+        # Verificar autenticación JWT
+        auth_header = request.headers.get('Authorization')
+        print(f"📱 Auth header: {auth_header}")
+        
+        if not auth_header or not auth_header.startswith('Bearer '):
+            return JsonResponse({'error': 'Token de autenticación requerido'}, status=401)
+        
+        token = auth_header.split(' ')[1]
+        print(f"📱 Token extraído: {token[:20]}...")
+        
+        # Decodificar token JWT de Django Simple JWT
+        try:
+            from rest_framework_simplejwt.tokens import AccessToken
+            
+            # Verificar token usando Simple JWT
+            access_token = AccessToken(token)
+            user_id = access_token['user_id']
+            print(f"📱 User ID del token: {user_id}")
+            
+            from django.contrib.auth.models import User
+            cliente = User.objects.get(id=user_id)
+            print(f"📱 Usuario autenticado: {cliente.username}")
+            
+        except Exception as jwt_error:
+            print(f"📱 Error JWT: {jwt_error}")
+            return JsonResponse({'error': 'Token inválido o expirado'}, status=401)
+        
+        # Parsear datos JSON
+        data = json.loads(request.body)
+        print(f"📱 Datos parseados: {data}")
+        
+        # Crear nueva solicitud con el usuario autenticado
+        solicitud = SolicitudServicio.objects.create(
+            cliente=cliente,
+            direccion_origen=data.get('direccionOrigen'),
+            direccion_destino=data.get('direccionDestino'),
+            fecha_servicio=timezone.now(),
+            descripcion_problema=data.get('comentarios', 'Solicitud desde app móvil'),
+            distancia_km=data.get('distanciaKm', 10),
+            estado='pendiente',
+            metodo_pago=data.get('metodoPago'),
+            tipo_vehiculo=data.get('tipoVehiculo'),
+            marca_vehiculo=data.get('marcaVehiculo'),
+            modelo_vehiculo=data.get('modeloVehiculo'),
+            placa_vehiculo=data.get('placaVehiculo'),
+            tipo_servicio_categoria='grua'
+        )
+        
+        print(f"📱 Solicitud creada con ID: {solicitud.id} para usuario: {cliente.username}")
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Solicitud creada exitosamente',
+            'solicitud_id': solicitud.id,
+            'numero_orden': solicitud.numero_orden,
+            'costo_total': 25000
+        })
+        
+    except Exception as e:
+        print(f"📱 ERROR GENERAL: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({'error': str(e)}, status=500)

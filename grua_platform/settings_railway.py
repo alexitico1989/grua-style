@@ -165,3 +165,12 @@ print(f"🔍 DEBUG: {DEBUG}")
 print(f"🔍 DATABASE: {DATABASES['default']['ENGINE']}")
 print(f"🔍 ALLOWED_HOSTS: {ALLOWED_HOSTS}")
 print(f"🔍 BASE_HOST: {BASE_HOST}")
+
+# Configuración de caché para archivos estáticos
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Headers de caché para archivos estáticos (1 año)
+WHITENOISE_MAX_AGE = 31536000
+
+# Headers específicos por tipo de archivo
+WHITENOISE_STATIC_PREFIX = '/static/'

@@ -100,6 +100,9 @@ urlpatterns = [
     path('registro/', views.registro, name='registro'),
     path('dashboard/', views.dashboard, name='dashboard'),
 
+    # app movil
+    # Agregar en la lista de URLs
+    path('api/v1/solicitar-servicio/', views.api_solicitar_servicio, name='api_solicitar_servicio'),
     # Revisiones técnicas
     path('revisiones-tecnicas/', views.revisiones_tecnicas, name='revisiones_tecnicas'),
 

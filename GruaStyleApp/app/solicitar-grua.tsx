@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   View,
   Text,
@@ -61,20 +62,214 @@ export default function SolicitarGruaScreen({ onBack }: SolicitarGruaScreenProps
 
     setLoading(true);
     try {
-      // Aquí conectaremos con tu API de solicitudes
-      console.log('Enviando solicitud:', formData);
-      
-      // Simulación temporal
-      setTimeout(() => {
-        Alert.alert('Éxito', 'Solicitud enviada correctamente');
-        setLoading(false);
-      }, 2000);
+      // Obtener token de autenticación
+      const token = await AsyncStorage.getItem('access_token');
+      if (!token) {
+        Alert.alert('Error', 'Sesión expirada. Por favor inicia sesión nuevamente.');
+        return;
+      }
+
+      // Preparar datos para enviar
+      const solicitudData = {
+        direccionOrigen: formData.direccionOrigen,
+        direccionDestino: formData.direccionDestino,
+        tipoVehiculo: formData.tipoVehiculo,
+        marcaVehiculo: formData.marcaVehiculo,
+        modeloVehiculo: formData.modeloVehiculo,
+        placaVehiculo: formData.placaVehiculo,
+        metodoPago: formData.metodoPago,
+        comentarios: formData.comentarios,
+        tipoServicio: 'inmediato',
+        fechaServicio: new Date().toISOString(),
+        distanciaKm: 10,
+      };
+
+      console.log('Enviando solicitud:', solicitudData);
+
+      // Hacer request a la API CON TOKEN
+      const response = await fetch('http://192.168.1.4:8000/api/v1/solicitar-servicio/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify(solicitudData),
+      });
+
+      console.log('Response status:', response.status);
+      const responseData = await response.json();
+      console.log('Response data:', responseData);
+
+      if (response.ok) {
+        // Solicitud creada exitosamente
+        Alert.alert(
+          'Solicitud Enviada', 
+          `Tu solicitud ${responseData.numero_orden} ha sido creada exitosamente.\n\nTotal: $${responseData.costo_total?.toLocaleString()}`,
+          [
+            {
+              text: 'Ver Detalles',
+              onPress: () => {
+                console.log('Ver detalles de solicitud:', responseData.id);
+              }
+            },
+            {
+              text: 'Volver al Dashboard',
+              onPress: () => {
+                if (onBack) onBack();
+              }
+            }
+          ]
+        );
+
+        // Limpiar formulario
+        setFormData({
+          direccionOrigen: '',
+          direccionDestino: '',
+          tipoVehiculo: 'auto',
+          marcaVehiculo: '',
+          modeloVehiculo: '',
+          placaVehiculo: '',
+          metodoPago: 'efectivo',
+          comentarios: '',
+        });
+
+      } else {
+        // Error en la solicitud
+        const errorMessage = responseData.error || responseData.detail || 'Error al crear la solicitud';
+        
+        // Si el token expiró, redirigir al login
+        if (response.status === 401 || errorMessage.includes('Token') || errorMessage.includes('expirado')) {
+          Alert.alert(
+            'Sesión Expirada', 
+            'Tu sesión ha expirado. Por favor inicia sesión nuevamente.',
+            [
+              {
+                text: 'Ir a Login',
+                onPress: () => {
+                  // Limpiar tokens expirados
+                  AsyncStorage.removeItem('access_token');
+                  AsyncStorage.removeItem('refresh_token');
+                  AsyncStorage.removeItem('user_data');
+                  // Aquí deberías navegar al login
+                  if (onBack) onBack(); // Por ahora volver al dashboard
+                }
+              }
+            ]
+          );
+        } else {
+          Alert.alert('Error', errorMessage);
+        }
+      }
       
     } catch (error) {
-      Alert.alert('Error', 'No se pudo enviar la solicitud');
+      console.error('Error enviando solicitud:', error);
+      Alert.alert('Error de Conexión', 'No se pudo conectar con el servidor. Verifica tu conexión a internet.');
+    } finally {
       setLoading(false);
     }
   };
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#0F0F23',
+    },
+    header: {
+      padding: 20,
+      paddingTop: 60,
+      alignItems: 'center',
+      position: 'relative',
+    },
+    backButton: {
+      position: 'absolute',
+      left: 20,
+      top: 70,
+      padding: 10,
+    },
+    backButtonText: {
+      color: '#00D563',
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: 'bold',
+      color: '#FFFFFF',
+      marginBottom: 5,
+    },
+    subtitle: {
+      fontSize: 16,
+      color: '#FFFFFF',
+      opacity: 0.8,
+    },
+    section: {
+      padding: 20,
+      paddingTop: 10,
+    },
+    sectionTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#00D563',
+      marginBottom: 15,
+    },
+    input: {
+      backgroundColor: '#FFFFFF',
+      borderRadius: 12,
+      padding: 15,
+      fontSize: 16,
+      marginBottom: 15,
+      color: '#000000',
+    },
+    textArea: {
+      height: 80,
+      textAlignVertical: 'top',
+    },
+    optionsGrid: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 10,
+    },
+    optionButton: {
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      borderRadius: 12,
+      padding: 12,
+      borderWidth: 1,
+      borderColor: 'rgba(255, 255, 255, 0.2)',
+      flex: 1,
+      minWidth: '45%',
+    },
+    optionSelected: {
+      backgroundColor: '#00D563',
+      borderColor: '#00D563',
+    },
+    optionText: {
+      color: '#FFFFFF',
+      textAlign: 'center',
+      fontSize: 16,
+    },
+    optionTextSelected: {
+      color: '#000000',
+      fontWeight: 'bold',
+    },
+    submitButton: {
+      backgroundColor: '#00D563',
+      borderRadius: 12,
+      padding: 18,
+      margin: 20,
+      alignItems: 'center',
+    },
+    submitButtonDisabled: {
+      opacity: 0.6,
+    },
+    submitButtonText: {
+      color: '#000000',
+      fontSize: 18,
+      fontWeight: 'bold',
+    },
+    bottomSpace: {
+      height: 50,
+    },
+  });
 
   return (
     <ScrollView style={styles.container}>
@@ -203,105 +398,3 @@ export default function SolicitarGruaScreen({ onBack }: SolicitarGruaScreenProps
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0F0F23',
-  },
-  header: {
-    padding: 20,
-    paddingTop: 60,
-    alignItems: 'center',
-    position: 'relative',
-  },
-  backButton: {
-    position: 'absolute',
-    left: 20,
-    top: 70,
-    padding: 10,
-  },
-  backButtonText: {
-    color: '#00D563',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 5,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    opacity: 0.8,
-  },
-  section: {
-    padding: 20,
-    paddingTop: 10,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#00D563',
-    marginBottom: 15,
-  },
-  input: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 15,
-    fontSize: 16,
-    marginBottom: 15,
-    color: '#000000',
-  },
-  textArea: {
-    height: 80,
-    textAlignVertical: 'top',
-  },
-  optionsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-  },
-  optionButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 12,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-    flex: 1,
-    minWidth: '45%',
-  },
-  optionSelected: {
-    backgroundColor: '#00D563',
-    borderColor: '#00D563',
-  },
-  optionText: {
-    color: '#FFFFFF',
-    textAlign: 'center',
-    fontSize: 16,
-  },
-  optionTextSelected: {
-    color: '#000000',
-    fontWeight: 'bold',
-  },
-  submitButton: {
-    backgroundColor: '#00D563',
-    borderRadius: 12,
-    padding: 18,
-    margin: 20,
-    alignItems: 'center',
-  },
-  submitButtonDisabled: {
-    opacity: 0.6,
-  },
-  submitButtonText: {
-    color: '#000000',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  bottomSpace: {
-    height: 50,
-  },
-});
