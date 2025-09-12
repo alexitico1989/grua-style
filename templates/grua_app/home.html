@@ -81,6 +81,9 @@
         transform-style: preserve-3d;
         position: relative;
         overflow: visible;
+        color: #ffffff;
+        text-shadow: none;
+        animation: none;
     }
     
     .hero-title-3d {
@@ -88,13 +91,9 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
-        /*text-shadow: 
-            0 0 20px rgba(0, 213, 99, 0.6),
-            0 0 40px rgba(0, 213, 99, 0.4),
-            0 0 80px rgba(0, 213, 99, 0.2),
-            0 0 120px rgba(0, 213, 99, 0.1);
-        /*animation: glow-pulse 4s ease-in-out infinite alternate;*/
-        will-change: text-shadow;
+        text-shadow: none;
+        animation: none;
+        will-change: auto;
     }
     
     .hero-title-line {
@@ -105,33 +104,33 @@
     
     .word-servicio {
         display: inline-block;
-        animation: slide-from-left 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        transform: translateX(-200vw);
+        animation: none;
+        transform: none;
+        opacity: 1;
     }
     
     .word-de {
         display: inline-block;
-        opacity: 0;
-        animation: fade-in-de 0.5s ease-in-out 1.8s forwards;
+        opacity: 1;
+        animation: none;
+        transform: none;
     }
     
     .word-grua {
         display: inline-block;
-        animation: slide-from-right 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-        transform: translateX(200vw);
+        animation: none;
+        transform: none;
+        opacity: 1;
     }
     
     .hero-highlight {
         color: #00D563;
         display: block;
-        /*animation: appear-24-7 1s ease-out 2.5s both;*/
-        opacity: 0;
-        text-shadow: 
-            0 0 20px rgba(0, 213, 99, 0.8),
-            0 0 40px rgba(0, 213, 99, 0.6),
-            0 0 80px rgba(0, 213, 99, 0.4),
-            0 0 120px rgba(0, 213, 99, 0.2);
-        will-change: opacity, transform;
+        animation: none;
+        opacity: 1;
+        text-shadow: none;
+        transform: none;
+        will-change: auto;
     }
     
     .hero-subtitle {
@@ -1142,80 +1141,7 @@
         text-decoration: none;
     }
     
-    /* Animaciones */
-    @keyframes slide-from-left {
-        0% {
-            transform: translateX(-200vw) rotateY(-90deg);
-            opacity: 0;
-        }
-        70% {
-            transform: translateX(20px) rotateY(10deg);
-            opacity: 1;
-        }
-        100% {
-            transform: translateX(0) rotateY(0deg);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes slide-from-right {
-        0% {
-            transform: translateX(200vw) rotateY(90deg);
-            opacity: 0;
-        }
-        70% {
-            transform: translateX(-20px) rotateY(-10deg);
-            opacity: 1;
-        }
-        100% {
-            transform: translateX(0) rotateY(0deg);
-            opacity: 1;
-        }
-    }
-    
-    @keyframes fade-in-de {
-        from {
-            opacity: 0;
-            transform: scale(0.5);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
-    }
-    
-    @keyframes appear-24-7 {
-        0% {
-            opacity: 0;
-            transform: translateY(50px) scale(0.5);
-        }
-        50% {
-            opacity: 0.5;
-            transform: translateY(25px) scale(0.8);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0px) scale(1);
-        }
-    }
-    
-    @keyframes glow-pulse {
-        0% {
-            text-shadow: 
-                0 0 20px rgba(0, 213, 99, 0.6),
-                0 0 40px rgba(0, 213, 99, 0.4),
-                0 0 80px rgba(0, 213, 99, 0.2),
-                0 0 120px rgba(0, 213, 99, 0.1);
-        }
-        100% {
-            text-shadow: 
-                0 0 25px rgba(0, 213, 99, 0.8),
-                0 0 50px rgba(0, 213, 99, 0.6),
-                0 0 100px rgba(0, 213, 99, 0.4),
-                0 0 150px rgba(0, 213, 99, 0.2);
-        }
-    }
-    
+    /* Animaciones - SOLO MANTENER NECESARIAS */
     @keyframes shimmer {
         0% {
             left: -100%;
@@ -1236,11 +1162,7 @@
         }
     }
     
-    /* ===================================
-       MOBILE OPTIMIZATIONS - HERO TITLE FIX
-       =================================== */
-
-    /* DESKTOP - Mantener animaciones */
+    /* ELIMINAR ANIMACIONES DE TEXTO EN DESKTOP */
     @media screen and (min-width: 769px) {
         .hero-title-line {
             display: flex;
@@ -1248,9 +1170,19 @@
             gap: 1rem;
             justify-content: flex-start;
         }
+        
+        /* FORZAR ELIMINACIÓN DE ANIMACIONES EN DESKTOP */
+        .word-servicio,
+        .word-de,
+        .word-grua,
+        .hero-highlight {
+            animation: none !important;
+            transform: none !important;
+            opacity: 1 !important;
+        }
     }
 
-    /* TABLET Y MOBILE - Título en línea horizontal */
+    /* TABLET Y MOBILE */
     @media screen and (max-width: 768px) {
         .hero-container {
             grid-template-columns: 1fr !important;
@@ -1264,7 +1196,6 @@
             padding: 20px !important;
         }
         
-        /* HERO TITLE - EN UNA LÍNEA HORIZONTAL */
         .hero-title {
             font-size: clamp(1.6rem, 7vw, 2.4rem) !important;
             line-height: 1.1 !important;
@@ -1284,7 +1215,6 @@
             justify-content: center !important;
         }
         
-        /* PALABRAS EN LÍNEA HORIZONTAL */
         .word-servicio,
         .word-de,
         .word-grua {
@@ -1308,7 +1238,6 @@
             padding: 0 10px !important;
         }
         
-        /* BOTONES CENTRADOS */
         .cta-buttons {
             display: flex !important;
             flex-direction: column !important;
@@ -1325,7 +1254,6 @@
             text-align: center !important;
         }
         
-        /* STATS - 3 COLUMNAS SIEMPRE */
         .hero-stats {
             grid-template-columns: repeat(3, 1fr) !important;
             gap: 12px !important;
@@ -1346,13 +1274,11 @@
             font-size: 0.8rem !important;
         }
         
-        /* GALERÍA MÁS PEQUEÑA */
         .hero-images {
             height: 250px !important;
             margin-top: 20px !important;
         }
         
-        /* CTA STATS - 2 COLUMNAS EN TABLET */
         .cta-stats {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 12px !important;
@@ -1382,14 +1308,13 @@
             padding: 30px 0 !important;
         }
 
-    /* AGREGAR ESTAS LÍNEAS AQUÍ: */
-    .hero-images {
+        .hero-images {
             height: 320px !important;
             margin-top: 16px !important;
             background: #111 !important;
         }
     
-    .slide img {
+        .slide img {
             object-fit: cover !important;
             object-position: center center !important;
             border-radius: 12px !important;
@@ -1405,7 +1330,6 @@
             padding: 16px 8px !important;
         }
         
-        /* TÍTULO MÁS PEQUEÑO EN MÓVIL */
         .hero-title {
             font-size: clamp(1.2rem, 8vw, 1.8rem) !important;
             margin-bottom: 12px !important;
@@ -1418,7 +1342,6 @@
             padding: 0 8px !important;
         }
         
-        /* BOTONES MÁS COMPACTOS */
         .btn-uber {
             padding: 12px 20px !important;
             font-size: 0.9rem !important;
@@ -1426,7 +1349,6 @@
             max-width: 280px !important;
         }
         
-        /* STATS MUY COMPACTAS */
         .hero-stats {
             gap: 8px !important;
             margin-top: 16px !important;
@@ -1447,8 +1369,6 @@
             font-size: 0.7rem !important;
         }
         
-        
-        /* CTA STATS - 2 COLUMNAS */
         .cta-stats {
             grid-template-columns: repeat(2, 1fr) !important;
             gap: 10px !important;
@@ -1467,7 +1387,6 @@
             font-size: 0.7rem !important;
         }
         
-        /* CTA BUTTONS EN MÓVIL */
         .cta-content .cta-buttons {
             grid-template-columns: 1fr !important;
             gap: 12px !important;
@@ -1482,12 +1401,8 @@
         }
     }
     
-    /* ===================================
-       PERFORMANCE OPTIMIZATIONS
-       =================================== */
-    
+    /* PERFORMANCE OPTIMIZATIONS */
     @media (max-width: 768px) {
-        /* ELIMINAR ANIMACIONES PESADAS EN MÓVIL */
         .hero-title-3d,
         .word-servicio,
         .word-de, 
@@ -1498,14 +1413,12 @@
             opacity: 1 !important;
         }
         
-        /* REDUCIR EFECTOS DE GLOW */
         .hero-title,
         .hero-title-3d,
         .hero-highlight {
             text-shadow: 0 0 10px rgba(0, 213, 99, 0.3) !important;
         }
         
-        /* ELIMINAR SHIMMER EFFECTS */
         .btn-uber::before,
         .section-header::before,
         .feature-card::before,
@@ -1519,7 +1432,6 @@
             display: none !important;
         }
         
-        /* SIMPLIFICAR BACKDROP FILTERS */
         .hero-section::before,
         .features-section::before,
         .pricing-section::before,
@@ -1528,7 +1440,6 @@
             background: none !important;
         }
         
-        /* REDUCIR BLUR EFFECTS */
         .stat-item,
         .feature-card,
         .pricing-card,
@@ -1538,7 +1449,6 @@
             backdrop-filter: blur(2px) !important;
         }
         
-        /* ELIMINAR HOVER TRANSFORMS COMPLEJOS */
         .feature-card:hover,
         .stat-item:hover,
         .cta-stat:hover,
@@ -1546,7 +1456,6 @@
             transform: none !important;
         }
         
-        /* SIMPLIFICAR BOX-SHADOWS */
         .feature-card,
         .stat-item,
         .cta-stat,
@@ -1556,7 +1465,6 @@
     }
     
     @media (max-width: 480px) {
-        /* PERFORMANCE EXTREMO EN MÓVILES PEQUEÑOS */
         .hero-section,
         .features-section,
         .pricing-section,
@@ -1574,7 +1482,6 @@
             border: 1px solid rgba(0, 213, 99, 0.5) !important;
         }
         
-        /* ELIMINAR TRANSICIONES COMPLEJAS */
         * {
             transition: none !important;
         }
@@ -1583,7 +1490,6 @@
             transition: background-color 0.2s ease !important;
         }
         
-        /* ELIMINAR BLUR COMPLETO */
         .stat-item,
         .feature-card,
         .pricing-card,
