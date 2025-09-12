@@ -2168,10 +2168,15 @@ function selectPlan(planType, duration) {
     
     // Verificar si el usuario está autenticado
     if (!userAuthenticated) {
-        alert('Para contratar una membresía debes estar registrado. Te redirigiremos al registro.');
-        window.location.href = '/registro/';
+        // Cerrar modal primero
+        closeModal();
+        // Redirigir directamente sin alert
+        setTimeout(() => {
+            window.location.href = '/registro/';
+        }, 300); // Pequeño delay para que se cierre el modal suavemente
         return;
     }
+}
     
     // Verificar si ya tiene membresía activa
     if (hasActiveMembresia) {
